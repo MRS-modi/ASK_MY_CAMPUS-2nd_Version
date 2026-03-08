@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ask My Campus - Question Details</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages/question.css" />
+
+  <script src="assets/js/darkmode.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="utils/roleGuard.js"></script>
+  <script src="assets/js/ui.js" defer></script>
+  <script src="assets/js/answers.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <div id="sidebarMount"></div>
+
+    <div class="main-shell">
+      <div id="navbarMount"></div>
+
+      <main class="page-content">
+        <div class="question-layout">
+          <section id="questionData" class="card detail-card">
+            Loading question...
+          </section>
+
+          <section class="card answer-editor">
+            <h2 class="section-title" style="font-size:1.4rem; margin-bottom:14px;">Write Your Answer</h2>
+
+            <textarea
+              id="answerText"
+              placeholder="Write a clear and helpful answer..."
+            ></textarea>
+
+            <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+              <button class="btn-primary" onclick="postAnswer()">Submit Answer</button>
+            </div>
+
+            <div id="answerMessage" class="message-text"></div>
+          </section>
+
+          <section>
+            <div class="home-header-row" style="margin-bottom:18px;">
+              <div>
+                <h2 class="section-title" style="margin-bottom:0;">Answers</h2>
+                <p class="section-subtitle">Community responses appear here.</p>
+              </div>
+            </div>
+
+            <div id="answersList" style="display:flex; flex-direction:column; gap:18px;"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

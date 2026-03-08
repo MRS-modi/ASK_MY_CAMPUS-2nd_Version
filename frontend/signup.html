@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ask My Campus - Signup</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages/auth.css" />
+
+  <script src="assets/js/darkmode.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+</head>
+<body>
+  <main class="auth-page">
+    <div class="auth-wrap">
+      <section class="auth-showcase">
+        <div>
+          <div class="auth-brand">
+            <div class="logo-pill">A</div>
+            <h1>Ask My Campus</h1>
+          </div>
+
+          <h2 class="auth-headline">
+            Join your campus knowledge community with a premium student-first experience.
+          </h2>
+
+          <p class="auth-text">
+            Create your account to ask questions, share answers, save important discussions, and manage official inquiries in one place.
+          </p>
+
+          <div class="auth-points">
+            <div class="auth-point"><span>◆</span><div>Students can ask and answer campus-related doubts.</div></div>
+            <div class="auth-point"><span>◆</span><div>Teachers can verify correct answers for trusted guidance.</div></div>
+            <div class="auth-point"><span>◆</span><div>Admins can manage inquiries and moderate the platform.</div></div>
+          </div>
+        </div>
+
+        <div class="question-tags">
+          <span class="tag-pill">#Campus</span>
+          <span class="tag-pill">#Learning</span>
+          <span class="tag-pill">#Students</span>
+          <span class="tag-pill">#Faculty</span>
+        </div>
+      </section>
+
+      <section class="auth-form-card">
+        <div class="auth-title">Create Account</div>
+        <p class="auth-subtitle">Sign up and start using Ask My Campus.</p>
+
+        <div class="auth-form">
+          <div class="auth-grid">
+            <div class="auth-field">
+              <label class="auth-label">Name</label>
+              <input id="signupName" class="auth-input" type="text" placeholder="Your full name" />
+            </div>
+
+            <div class="auth-field">
+              <label class="auth-label">Email</label>
+              <input id="signupEmail" class="auth-input" type="email" placeholder="Your email" />
+            </div>
+
+            <div class="auth-field">
+              <label class="auth-label">Password</label>
+              <input id="signupPassword" class="auth-input" type="password" placeholder="Create password" />
+            </div>
+
+            <div class="auth-field">
+              <label class="auth-label">Branch</label>
+              <input id="signupBranch" class="auth-input" type="text" placeholder="e.g. CSBS" />
+            </div>
+
+            <div class="auth-field">
+              <label class="auth-label">Year</label>
+              <input id="signupYear" class="auth-input" type="text" placeholder="e.g. 1" />
+            </div>
+
+            <div class="auth-field">
+              <label class="auth-label">Enrollment Number</label>
+              <input id="signupEnrollment" class="auth-input" type="text" placeholder="Enrollment no." />
+            </div>
+
+            <div class="auth-field">
+              <label class="auth-label">Phone</label>
+              <input id="signupPhone" class="auth-input" type="text" placeholder="Phone number" />
+            </div>
+
+            <div class="auth-field">
+              <label class="auth-label">Address</label>
+              <input id="signupAddress" class="auth-input" type="text" placeholder="Address" />
+            </div>
+          </div>
+
+          <div class="auth-actions">
+            <button class="btn-primary" onclick="signupUser()">Create Account</button>
+            <div class="auth-note">
+              Already have an account?
+              <a class="auth-link" href="login.html">Login</a>
+            </div>
+            <div id="authMessage" class="auth-message"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

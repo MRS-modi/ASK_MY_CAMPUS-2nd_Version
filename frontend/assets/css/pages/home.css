@@ -1,0 +1,62 @@
+.home-top{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+.home-section{
+  margin-top:26px;
+}
+
+.home-header-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+
+.filter-chips{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.filter-chip{
+  padding:10px 16px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.04);
+  color:var(--text-main);
+}
+
+.filter-chip.active{
+  background:var(--gradient-main);
+  color:#fff;
+  border:none;
+}
+
+.side-info-card h3{
+  font-size:1.45rem;
+  margin-bottom:14px;
+}
+
+.side-info-card p{
+  color:var(--text-soft);
+  line-height:1.7;
+}
+
+.top-right-actions{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+@media (max-width:700px){
+  .home-header-row{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+}

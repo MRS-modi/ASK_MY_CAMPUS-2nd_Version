@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ask My Campus - Admin Panel</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages/admin.css" />
+
+  <script src="assets/js/darkmode.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="utils/roleGuard.js"></script>
+  <script src="assets/js/ui.js" defer></script>
+  <script src="assets/js/admin.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <div id="sidebarMount"></div>
+
+    <div class="main-shell">
+      <div id="navbarMount"></div>
+
+      <main class="page-content">
+        <div class="hero-card" style="margin-bottom:24px;">
+          <h1 class="hero-title" style="font-size:2rem;">Admin Dashboard</h1>
+          <p class="hero-text">
+            Manage users, inquiries, platform activity, and role assignments.
+          </p>
+        </div>
+
+        <section class="admin-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Users</div>
+            <div class="stat-value" id="adminTotalUsers">--</div>
+            <div class="stat-line"></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Total Questions</div>
+            <div class="stat-value" id="adminTotalQuestions">--</div>
+            <div class="stat-line"></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Total Answers</div>
+            <div class="stat-value" id="adminTotalAnswers">--</div>
+            <div class="stat-line"></div>
+          </div>
+        </section>
+
+        <section class="admin-section">
+          <div class="home-header-row">
+            <div>
+              <h2 class="section-title" style="margin-bottom:0;">Users Management</h2>
+              <p class="section-subtitle">Promote and manage user roles.</p>
+            </div>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersTableBody">
+                <tr>
+                  <td colspan="5">Loading users...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="admin-section" style="margin-top:26px;">
+          <div class="home-header-row">
+            <div>
+              <h2 class="section-title" style="margin-bottom:0;">Inquiry Management</h2>
+              <p class="section-subtitle">Review and update inquiry statuses.</p>
+            </div>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Student</th>
+                  <th>Department</th>
+                  <th>Subject</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminInquiryTableBody">
+                <tr>
+                  <td colspan="6">Loading inquiries...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof loadAdminDashboard === "function") {
+        loadAdminDashboard();
+      } else {
+        console.error("loadAdminDashboard function not found");
+      }
+    });
+  </script>
+</body>
+</html>

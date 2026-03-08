@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ask My Campus - Official Inquiry</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages/inquiry.css" />
+
+  <script src="assets/js/darkmode.js"></script>
+  <script src="assets/js/ui.js" defer></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/inquiry.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <div id="sidebarMount"></div>
+
+    <div class="main-shell">
+      <div id="navbarMount"></div>
+
+      <main class="page-content">
+        <div class="hero-card" style="margin-bottom:24px;">
+          <h1 class="hero-title" style="font-size:2rem;">Official Inquiry</h1>
+          <p class="hero-text">
+            Send your private inquiry to the college administration department.
+          </p>
+        </div>
+
+        <div class="card" style="max-width:980px;">
+          <div class="form-layout">
+            <div class="form-grid">
+              <div class="field-group">
+                <label class="field-label">Name</label>
+                <input id="inqName" class="field-input" type="text" placeholder="Your full name" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Father Name</label>
+                <input id="inqFatherName" class="field-input" type="text" placeholder="Father name" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Enrollment Number</label>
+                <input id="inqEnrollment" class="field-input" type="text" placeholder="Enrollment number" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Email</label>
+                <input id="inqEmail" class="field-input" type="email" placeholder="Your email" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Branch</label>
+                <input id="inqBranch" class="field-input" type="text" placeholder="e.g. CSBS" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Year</label>
+                <input id="inqYear" class="field-input" type="text" placeholder="e.g. 1" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Department</label>
+                <select id="inqDepartment" class="field-select">
+                  <option value="Scholarship">Scholarship</option>
+                  <option value="Exam Cell">Exam Cell</option>
+                  <option value="Accounts">Accounts</option>
+                  <option value="Hostel">Hostel</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Subject</label>
+                <input id="inqSubject" class="field-input" type="text" placeholder="Short subject" />
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Message</label>
+              <textarea id="inqMessage" class="field-textarea" placeholder="Explain your issue..."></textarea>
+            </div>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <button class="btn-primary" onclick="submitInquiry()">Submit Inquiry</button>
+              <a href="my-inquiries.html" class="btn-secondary">View My Inquiries</a>
+            </div>
+
+            <div id="inquiryMessage" class="message-text"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

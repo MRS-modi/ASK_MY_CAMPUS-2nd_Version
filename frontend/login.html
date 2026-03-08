@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ask My Campus - Login</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages/auth.css" />
+
+  <script src="assets/js/darkmode.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+</head>
+<body>
+  <main class="auth-page">
+    <div class="auth-wrap">
+      <section class="auth-showcase">
+        <div>
+          <div class="auth-brand">
+            <div class="logo-pill">A</div>
+            <h1>Ask My Campus</h1>
+          </div>
+
+          <h2 class="auth-headline">
+            Campus doubts, verified answers, and official help — all in one place.
+          </h2>
+
+          <p class="auth-text">
+            Login to continue exploring questions, helping other students, and accessing your personalized academic community.
+          </p>
+
+          <div class="auth-points">
+            <div class="auth-point"><span>◆</span><div>Ask questions and get help from students and teachers.</div></div>
+            <div class="auth-point"><span>◆</span><div>Get verified answers from faculty for trusted guidance.</div></div>
+            <div class="auth-point"><span>◆</span><div>Track notifications, saved posts, and private inquiries.</div></div>
+          </div>
+        </div>
+
+        <div class="question-tags">
+          <span class="tag-pill">#Campus</span>
+          <span class="tag-pill">#Questions</span>
+          <span class="tag-pill">#Verified</span>
+          <span class="tag-pill">#Community</span>
+        </div>
+      </section>
+
+      <section class="auth-form-card">
+        <div class="auth-title">Welcome Back</div>
+        <p class="auth-subtitle">Login to your account and continue where you left off.</p>
+
+        <div class="auth-form">
+          <div class="auth-field">
+            <label class="auth-label">Email</label>
+            <input id="loginEmail" class="auth-input" type="email" placeholder="Enter your email" />
+          </div>
+
+          <div class="auth-field">
+            <label class="auth-label">Password</label>
+            <input id="loginPassword" class="auth-input" type="password" placeholder="Enter your password" />
+          </div>
+
+          <div class="auth-actions">
+            <button class="btn-primary" onclick="loginUser()">Login</button>
+            <div class="auth-note">
+              Don’t have an account?
+              <a class="auth-link" href="signup.html">Create one</a>
+            </div>
+            <div id="authMessage" class="auth-message"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

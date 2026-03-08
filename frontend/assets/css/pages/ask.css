@@ -1,0 +1,25 @@
+.ask-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.ask-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.ask-form textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 10px;
+}
+
+.ask-form input {
+  width: 100%;
+  padding: 10px;
+}
+
+.ask-form button {
+  margin-top: 15px;
+}

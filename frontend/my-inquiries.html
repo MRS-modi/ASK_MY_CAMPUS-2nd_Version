@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ask My Campus - My Inquiries</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages/inquiry.css" />
+
+  <script src="assets/js/darkmode.js"></script>
+  <script src="assets/js/ui.js" defer></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/inquiry.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <div id="sidebarMount"></div>
+
+    <div class="main-shell">
+      <div id="navbarMount"></div>
+
+      <main class="page-content">
+        <div class="hero-card" style="margin-bottom:24px;">
+          <h1 class="hero-title" style="font-size:2rem;">My Inquiries</h1>
+          <p class="hero-text">
+            Track the status of your submitted official inquiries.
+          </p>
+        </div>
+
+        <section>
+          <div class="home-header-row">
+            <div>
+              <h2 class="section-title" style="margin-bottom:0;">Submitted Inquiries</h2>
+              <p class="section-subtitle">Private inquiry records and their latest status.</p>
+            </div>
+          </div>
+
+          <div id="myInquiriesList" class="inquiry-list"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof loadMyInquiries === "function") {
+        loadMyInquiries();
+      }
+    });
+  </script>
+</body>
+</html>

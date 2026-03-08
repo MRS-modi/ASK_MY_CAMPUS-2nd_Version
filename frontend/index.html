@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ask My Campus - Home</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages/home.css" />
+
+  <script src="assets/js/darkmode.js"></script>
+  <script src="assets/js/ui.js" defer></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/questions.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <div id="sidebarMount"></div>
+
+    <div class="main-shell">
+      <div id="navbarMount"></div>
+
+      <main class="page-content">
+        <section class="home-top">
+          <div class="hero-card">
+            <h1 class="hero-title">Welcome back 👋</h1>
+            <p class="hero-text">
+              Ask doubts, help others, and build your campus knowledge community with a premium student-first experience.
+            </p>
+          </div>
+
+          <div class="grid-3">
+            <div class="stat-card">
+              <div class="stat-label">Total Questions</div>
+              <div class="stat-value" id="totalQuestionsStat">--</div>
+              <div class="stat-line"></div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-label">Trending Today</div>
+              <div class="stat-value" id="trendingQuestionsStat">--</div>
+              <div class="stat-line"></div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-label">My Questions</div>
+              <div class="stat-value" id="myQuestionsStat">--</div>
+              <div class="stat-line"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="home-section">
+          <div class="page-grid">
+            <div>
+              <div class="home-header-row">
+                <div>
+                  <h2 class="section-title">Questions</h2>
+                  <p class="section-subtitle">Browse recent and trending questions from your campus community.</p>
+                </div>
+
+                <div class="filter-chips">
+                  <button class="filter-chip active" id="recentBtn" onclick="setQuestionFilter('recent')">
+                    Recent
+                  </button>
+                  <button class="filter-chip" id="trendingBtn" onclick="setQuestionFilter('trending')">
+                    Trending
+                  </button>
+                </div>
+              </div>
+
+              <div id="questionsList"></div>
+            </div>
+
+            <div class="right-stack">
+              <div class="card side-info-card">
+                <h3>Trending Tags</h3>
+                <div class="question-tags">
+                  <span class="tag-pill">#Scholarship</span>
+                  <span class="tag-pill">#Exam</span>
+                  <span class="tag-pill">#DSA</span>
+                  <span class="tag-pill">#Projects</span>
+                </div>
+              </div>
+
+              <div class="card side-info-card">
+                <h3>Quick Links</h3>
+                <div class="quick-links">
+                  <a class="quick-link" href="ask.html">➕ Ask a Question</a>
+                  <a class="quick-link" href="my-questions.html">📄 My Questions</a>
+                  <a class="quick-link" href="saved.html">⭐ Saved Questions</a>
+                  <a class="quick-link" href="inquiry.html">📨 Official Inquiry</a>
+                </div>
+              </div>
+
+              <div class="card side-info-card">
+                <h3>Faculty Verification</h3>
+                <p>
+                  Teachers can mark correct answers as <strong style="color:#34d399;">Verified ✅</strong>,
+                  so students can trust the best responses faster.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof loadQuestions === "function") {
+        loadQuestions("recent");
+      }
+      if (typeof loadQuestionStats === "function") {
+        loadQuestionStats();
+      }
+    });
+  </script>
+</body>
+</html>
