@@ -16,3 +16,17 @@ Ask My Campus is a college-focused Q&A and inquiry platform where students can a
 ## Tech Stack
 - Backend: FastAPI, SQLAlchemy, SQLite
 - Frontend: HTML, Tailwind CSS, JavaScript
+
+## Screenshots
+
+### Home Page
+![Home](screenshots/home.png)
+
+### Ask Question Page
+![Ask](screenshots/ask.png)
+
+### Question Page
+![Question](screenshots/question.png)
+
+### Admin Dashboard
+![Admin](screenshots/admin.png)
