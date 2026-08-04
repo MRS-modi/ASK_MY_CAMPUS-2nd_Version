@@ -1,5 +1,4 @@
-const API_BASE_URL = "https://ask-my-campus.onrender.com";
-//const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "https://ask-my-campus.onrender.com";
 
 async function apiRequest(endpoint, method = "GET", data = null) {
   const token = localStorage.getItem("token");
