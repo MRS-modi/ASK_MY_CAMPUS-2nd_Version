@@ -1,12 +1,9 @@
 import os
 
-from fastapi import FastAPI
-from fastapi import Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from starlette.responses import FileResponse
-from fastapi.responses import FileResponse
-from starlette.responses import RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse
 
 from app.core.config import settings
 from app.core.database import Base, engine
@@ -41,13 +38,14 @@ app.add_middleware(
         "http://localhost:5500",
         "http://127.0.0.1:5501",
         "http://localhost:5501",
-        "https://overlook-virtual-shrubbery.ngrok-free.dev"
+        "https://overlook-virtual-shrubbery.ngrok-free.dev",
+        "https://ask-my-campus.netlify.app",
+        "*"
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-assets_path = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "assets")
 
 app.include_router(auth_router)
 app.include_router(questions_router)
@@ -58,18 +56,10 @@ app.include_router(inquiries_router)
 app.include_router(admin_router)
 app.include_router(comments_router)
 app.include_router(faculty_router)
-app.include_router(admin_router, prefix="/admin", tags=["Admin"])
-app.include_router(auth_router, prefix="/auth")
-
-
-## Purane duplicate root/mounts hata kar ye rakho:
-app.mount("/assets", StaticFiles(directory="../frontend/assets"), name="assets")
-app.mount("/components", StaticFiles(directory="../frontend/components"), name="components")
-app.mount("/pages", StaticFiles(directory="../frontend", html=True), name="frontend")
 
 @app.get("/")
 def redirect_to_login():
-    return RedirectResponse(url="/pages/login.html")
+    return RedirectResponse(url="/health")
 
 @app.get("/health")
 def health_check():
@@ -78,7 +68,6 @@ def health_check():
         "environment": settings.APP_ENV
     }
 
-# app/main.py mein startup event mein dal do
 @app.on_event("startup")
 def startup_event():
     from app.core.database import engine, Base
