@@ -1,5 +1,4 @@
-const API_BASE = "https://overlook-virtual-shrubbery.ngrok-free.dev";
-
+const API_BASE_URL = "https://ask-my-campus.onrender.com";
 //const API_BASE = "http://127.0.0.1:8000";
 
 async function apiRequest(endpoint, method = "GET", data = null) {
