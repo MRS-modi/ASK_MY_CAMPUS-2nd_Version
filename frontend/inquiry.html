@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ask My Campus - Official Inquiry</title>
@@ -14,10 +19,49 @@
   <link rel="stylesheet" href="assets/css/components.css" />
   <link rel="stylesheet" href="assets/css/pages/inquiry.css" />
 
+  <style>
+    /* Inquiry Page Layout - Grid ke sath */
+    .inquiry-page-layout { 
+        display: grid; 
+        grid-template-columns: 1fr 320px; 
+        gap: 24px; 
+        align-items: stretch; /* Ye dono cards ko barabar height deta hai */
+    }
+    
+    .inquiry-tips-card { 
+        background: linear-gradient(145deg, #1e293b, #0f172a);
+        border: 1px solid rgba(167, 139, 250, 0.2);
+        border-radius: 16px; 
+        padding: 24px;
+        position: sticky; 
+        top: 100px;
+        height: 100%;       /* Box ko pura stretch karega */
+        min-height: 550px;  /* Vertical length badhane ke liye minimum height */
+    }
+
+    .inquiry-tips-card h3 { color: #a78bfa; margin-top: 0; font-size: 1.1rem; }
+    .inquiry-tips-list { list-style: none; padding: 0; margin: 16px 0 0 0; }
+    .inquiry-tips-list li { 
+        font-size: 0.9rem; 
+        color: #94a3b8; 
+        margin-bottom: 20px; /* List items ke beech space badha di */
+        line-height: 1.6; 
+        padding-left: 22px; 
+        position: relative; 
+    }
+    .inquiry-tips-list li::before { content: "🔒"; position: absolute; left: 0; }
+
+    /* Mobile Responsive */
+    @media (max-width: 950px) {
+        .inquiry-page-layout { grid-template-columns: 1fr; }
+        .inquiry-tips-card { position: static; min-height: auto; }
+    }
+  </style>
+
   <script src="assets/js/darkmode.js"></script>
-  <script src="assets/js/ui.js" defer></script>
   <script src="assets/js/api.js"></script>
-  <script src="assets/js/inquiry.js"></script>
+  <script src="assets/js/ui.js" defer></script>
+  <script src="assets/js/inquiry.js" defer></script>
 </head>
 <body>
   <div class="app-shell">
@@ -34,6 +78,7 @@
           </p>
         </div>
 
+        <div class="inquiry-page-layout"> 
         <div class="card" style="max-width:980px;">
           <div class="form-layout">
             <div class="form-grid">
@@ -97,8 +142,41 @@
             <div id="inquiryMessage" class="message-text"></div>
           </div>
         </div>
-      </main>
+      <div class="inquiry-tips-card">
+      <h3>🛡️ Privacy & Process</h3>
+      <ul class="inquiry-tips-list">
+        <li><strong>100% Private:</strong> Your inquiry is visible ONLY to you and the authorized administrative officers.</li>
+        <li><strong>Direct Access:</strong> Your message goes straight to the official departmental email.</li>
+        <li><strong>Track Progress:</strong> Check the "My Inquiries" section to see status updates.</li>
+        <li><strong>Be Accurate:</strong> Provide your correct enrollment number for faster resolution.</li>
+        <li><strong>Stay Professional:</strong> Clearly explain your issue so the admin team can help you effectively.</li>
+      </ul>
     </div>
   </div>
+</main>
+    </div>
+  </div>
+  <script>
+document.addEventListener("DOMContentLoaded", async () => {
+    // 🔐 1. Auth Guard (Sabse Pehle Route Validate)
+    if (!localStorage.getItem("token")) {
+        window.location.href = "/pages/login.html";
+        return;
+    }
+
+    // 🏗️ 2. Layout Load (Sidebar & Navbar rendering)
+    await loadBaseLayout();
+
+    // 📊 4. Page Specific Form Initialization Logic
+    try {
+        if (typeof initInquiryForm === "function") {
+            await initInquiryForm();
+            console.log("Inquiry form initialized.");
+        }
+    } catch (err) {
+        console.error("Form initialize karne mein error:", err);
+    }
+});
+</script>
 </body>
 </html>

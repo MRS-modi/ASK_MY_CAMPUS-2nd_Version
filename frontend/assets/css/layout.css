@@ -1,96 +1,180 @@
-.app-shell{
-  display:flex;
-  min-height:100vh;
+.app-shell {
+    display: flex;
+    min-height: 100vh;
 }
+
+#sidebarMount:empty, #navbarMount:empty {
+    opacity: 0;
+}
+
 
 .sidebar{
+
   width:270px;
+
   min-width:270px;
+
   position:fixed;
+
   top:0;
+
   left:0;
+
   bottom:0;
+
   background:var(--bg-sidebar);
+
   backdrop-filter:blur(18px);
+
   border-right:1px solid var(--border);
+
   padding:22px 18px;
+
   z-index:1000;
+
 }
+
+
 
 .main-shell{
+
   margin-left:270px;
+
   width:calc(100% - 270px);
+
   min-height:100vh;
+
 }
+
+
 
 .navbar{
+
   position:sticky;
+
   top:0;
+
   z-index:900;
+
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
+
   gap:20px;
+
   padding:18px 28px;
+
   background:rgba(10,15,28,0.55);
+
   backdrop-filter:blur(20px);
+
   border-bottom:1px solid var(--border);
+
 }
+
+
 
 body.light .navbar{
+
   background:rgba(255,255,255,0.75);
+
 }
+
+
 
 .page-content{
+
   padding:28px;
+
 }
 
-.page-grid{
-  display:grid;
-  grid-template-columns:2fr 1fr;
-  gap:24px;
+
+
+.page-grid {
+    display: grid;
+    /* Left column 1fr, Right column fixed 320px */
+    grid-template-columns: 1fr 320px; 
+    gap: 25px;
+    align-items: start;
 }
 
-.right-stack{
-  display:flex;
-  flex-direction:column;
-  gap:20px;
+.right-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.side-info-card {
+    padding: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
 }
 
 .section-title{
+
   font-size:1.5rem;
+
   font-weight:700;
+
   margin-bottom:18px;
+
   letter-spacing:-0.02em;
+
 }
 
 .section-subtitle{
+
   color:var(--text-soft);
+
   margin-top:8px;
+
 }
+
+
 
 .top-space{
+
   margin-top:24px;
+
 }
+
+
 
 .mobile-topbar{
+
   display:none;
+
 }
 
-@media (max-width:1100px){
-  .page-grid{
-    grid-template-columns:1fr;
-  }
+
+
+@media (max-width: 900px) {
+    .page-grid {
+        grid-template-columns: 1fr; /* Mobile pe stack ho jayega */
+    }
 }
+
+
 
 @media (max-width:900px){
+
   .sidebar{
+
     transform:translateX(-100%);
+
     transition:transform 0.25s ease;
+
   }
 
+
+
   .sidebar.open{
+
     transform:translateX(0);
+
   }
 
   .main-shell{
@@ -111,4 +195,183 @@ body.light .navbar{
     align-items:center;
     gap:12px;
   }
+}
+
+/* --- Desktop Default (Waisa hi rahega) --- */
+.app-shell { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 270px; min-width: 270px; position: fixed; top: 0; left: 0; bottom: 0;
+  background: var(--bg-sidebar); backdrop-filter: blur(18px); 
+  border-right: 1px solid var(--border); padding: 22px 18px; z-index: 1000;
+}
+
+.main-shell { margin-left: 270px; width: calc(100% - 270px); }
+
+/* --- Mobile Responsiveness (Fixed) --- */
+@media (max-width: 900px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 2000; /* Sidebar sabke upar rahega */
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  .main-shell { margin-left: 0 !important; width: 100% !important; }
+
+  /* Navbar Elements Fix */
+  .navbar { padding: 12px 15px; }
+  .search-box, .ask-btn-nav, .top-right-actions .btn-secondary, .top-right-actions .profile-chip {
+    display: none; /* Mobile par clean navbar */
+  }
+
+  .mobile-topbar { display: flex !important; align-items: center; gap: 10px; }
+
+  /* Grid Fix */
+  .page-grid { grid-template-columns: 1fr !important; padding: 15px !important; }
+  
+  /* Cards Font Fix */
+  .section-title { font-size: 1.2rem !important; }
+  .stat-number { font-size: 1.4rem !important; }
+}
+
+/* Sidebar footer ko default hide mat karo, sirf desktop par hide karo */
+@media (min-width: 901px) {
+  .sidebar-footer {
+    display: none !important; /* Laptop par niche wale extra buttons hide */
+  }
+}
+
+/* Sidebar structure ko scrollable banane ke liye */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebar-nav {
+  flex: 1; /* Saare main links upar rahenge */
+}
+
+@media (max-width: 900px) {
+  .sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+}
+
+@media (max-width: 900px) {
+  /* Login aur Signup form ke grid ko mobile par single column banao */
+  .auth-grid {
+    display: grid;
+    grid-template-columns: 1fr !important; /* Laptop ka 2-column override hokar 1-column ho jayega */
+    gap: 12px !important;
+  }
+
+  /* Saare fields ko mobile par full width do */
+  .auth-field {
+    grid-column: span 1 !important; /* 'span 2' ko override karke 1 kar diya */
+  }
+
+  .auth-input {
+    width: 100% !important;
+  }
+}
+
+/* Laptop (Desktop) fix */
+@media (min-width: 901px) {
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 9999 !important; /* Force to top layer */
+    pointer-events: auto !important; /* Click ensure karne ke liye */
+  }
+
+  .top-right-actions {
+    z-index: 10000 !important; /* Button ko sabse upar laane ke liye */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+}
+
+
+/* Laptop ke liye default size (16px) */
+html {
+  font-size: 16px;
+}
+
+/* Mobile par font size chhota karo (14px) */
+@media (max-width: 900px) {
+  html {
+    font-size: 14px; /* Isse pure website ka text 12.5% chhota ho jayega */
+  }
+
+  /* Specific headings ko aur thoda control karo */
+  .section-title {
+    font-size: 1.3rem !important;
+  }
+  
+  .auth-title {
+    font-size: 1.5rem !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .page-content {
+    padding: 10px !important; /* Mobile par screen borders chipke hue achhe lagte hain */
+  }
+  
+  .auth-form-card {
+    padding: 20px !important;
+  }
+}
+
+
+
+
+/* new code hid karne k liye
+
+/* Sidebar ko pehle hi hidden rakho */
+.sidebar {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+/* Jab load ho jaye tab dikhao */
+.app-shell.loaded .sidebar {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   📱 MOBILE NAVBAR RESPONSIVE GRID & SEARCH OVERRIDE
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* 1. Hide the notification bell exclusively on mobile view */
+    .navbar .top-right-actions a[href="notifications.html"] {
+        display: none !important;
+    }
+
+    /* 2. Push search box to utilize maximum flex area */
+    .navbar .search-box {
+        flex-grow: 1 !important;
+        display: flex !important;
+        align-items: center;
+        position: relative;
+        z-index: 10; /* Dynamic layered dimension check */
+    }
+
+    /* 3. Ensure input text box accepts explicit focus pointer clicks */
+    .navbar #globalSearch {
+        width: 100% !important;
+        pointer-events: auto !important; /* Enable click triggers safely */
+        cursor: text;
+    }
+
+    /* 4. Squeeze other secondary profile metadata if necessary to clear block clutter */
+    .navbar .profile-chip #profileName {
+        display: none !important; /* Mobile check: only show avatar circle to save room */
+    }
 }

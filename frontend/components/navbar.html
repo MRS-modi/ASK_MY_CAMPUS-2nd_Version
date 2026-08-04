@@ -1,28 +1,52 @@
-<header class="navbar">
+<header class="navbar" style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 10px;">
   <div class="mobile-topbar">
     <button class="icon-btn" id="mobileMenuBtn">☰</button>
     <div class="logo-pill">A</div>
   </div>
 
-  <div class="search-box">
+  <div class="search-box" style="flex-grow: 1; min-width: 120px; display: flex; align-items: center; position: relative; z-index: 99999; pointer-events: auto;">
     <span>🔎</span>
-    <input id="globalSearch" type="text" placeholder="Search questions, tags, or people..." />
+    <input id="globalSearch" type="text" placeholder="Search questions, tags, or people..." style="width: 100%; pointer-events: auto; cursor: text;" />
   </div>
 
-  <div class="top-right-actions">
+  <div class="top-right-actions" style="display: flex; align-items: center; gap: 8px;">
     <a class="btn-primary ask-btn-nav" href="ask.html">+ Ask Question</a>
 
-    <a class="icon-btn" href="notifications.html" title="Notifications">🔔</a>
+    <a class="icon-btn nav-notification-bell" href="notifications.html" title="Notifications" style="position: relative;">
+      🔔
+      <span id="notificationCountBadge" style="display:none; position:absolute; top:-2px; right:-2px; background:#ef4444; color:#fff; border-radius:50%; width:16px; height:16px; font-size:9px; font-weight:bold; align-items:center; justify-content:center;">0</span>
+    </a>
 
     <button class="icon-btn" onclick="toggleDarkMode()" title="Toggle Theme">
       <span id="themeToggleIcon">☀</span>
     </button>
 
-    <div class="profile-chip" id="profileChip">
+    <div class="profile-chip dynamic-nav-profile" id="profileChip" style="display: flex; align-items: center; gap: 6px;">
       <div class="profile-avatar" id="profileAvatar">R</div>
       <div id="profileName">Profile</div>
     </div>
 
     <button class="btn-secondary" id="logoutBtn">Logout</button>
   </div>
+
+  <style>
+    @media (max-width: 768px) {
+        /* 1. Mobile par notification bell aur profile icon dono completely hide */
+        .nav-notification-bell,
+        .dynamic-nav-profile {
+            display: none !important;
+        }
+        
+        /* 2. Ask Question button layout spacing optimization */
+        .ask-btn-nav {
+            padding: 6px 10px !important;
+            font-size: 12px !important;
+        }
+
+        /* 3. Top actions alignment */
+        .top-right-actions {
+            gap: 6px !important;
+        }
+    }
+  </style>
 </header>

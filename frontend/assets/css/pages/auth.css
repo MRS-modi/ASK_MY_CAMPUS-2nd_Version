@@ -110,10 +110,10 @@
   gap:18px;
 }
 
-.auth-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
+.auth-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Laptop ke liye 2 columns */
+  gap: 15px;
 }
 
 .auth-field{
@@ -190,5 +190,23 @@
 
   .auth-headline{
     font-size:2rem;
+  }
+}
+
+/* Mobile Responsive Overrides */
+@media (max-width: 768px) {
+  .auth-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important; /* Force single column */
+    gap: 15px !important;
+  }
+
+  .auth-field {
+    grid-column: span 1 !important; /* Force all fields to be 1 column wide */
+    width: 100% !important;
+  }
+
+  .auth-input {
+    width: 100% !important;
   }
 }

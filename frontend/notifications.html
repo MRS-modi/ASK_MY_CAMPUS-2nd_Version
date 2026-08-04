@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ask My Campus - Notifications</title>
@@ -47,5 +50,35 @@
       </main>
     </div>
   </div>
+  <script>
+document.addEventListener("DOMContentLoaded", async () => {
+    // 1. SABSE PEHLE: Layout Load karo (flicker hatao)
+    await loadBaseLayout();
+
+    // 2. Auth Guard: Layout ke baad check karo
+    if (!localStorage.getItem("token")) {
+        window.location.href = "/pages/login.html";
+        return;
+    }
+
+    // 3. Page Specific Logic: Notifications load karo
+    // IMPORTANT: 'notifications.js' file ke andar se wo 
+    // 'document.addEventListener' wali line hata dena jo auto-load karti hai.
+    try {
+        if (typeof loadNotifications === "function") {
+            await loadNotifications();
+            console.log("Notifications loaded successfully.");
+        }
+    } catch (err) {
+        console.error("Notifications load karne mein error:", err);
+        const container = document.getElementById("notificationsList");
+        if (container) {
+            container.innerHTML = `<div class="card" style="padding:20px; text-align:center;">
+                                    <p style="color:#f87171;">Failed to load notifications. Try again later.</p>
+                                  </div>`;
+        }
+    }
+});
+</script>
 </body>
 </html>

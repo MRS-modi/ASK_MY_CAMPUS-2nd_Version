@@ -392,3 +392,186 @@ body.light .sidebar-link.active{
     flex-direction:column;
   }
 }
+
+/* Layout Alignment */
+.home-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Chips aur Filter button ke beech ka gap */
+}
+
+/* Filter button ko premium look aur proper height dene ke liye */
+.btn-primary-outline {
+    background: transparent;
+    border: 1px solid var(--accent-color, #a78bfa);
+    color: var(--accent-color, #a78bfa);
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 38px; /* Chips ke height ke barabar */
+    display: flex;
+    align-items: center;
+    white-space: nowrap; /* Button wrap na ho */
+}
+
+/* Header container ka flex ensure karne ke liye */
+.header-right-controls {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.btn-primary-outline:hover {
+    background: var(--accent-color, #a78bfa);
+    color: white;
+}
+
+/* index.html ke <style> tag mein ya CSS file mein add karo */
+#filterDrawer {
+    display: none; 
+    position: fixed !important; /* Fixed position se ye screen pe float karega */
+    top: 80px !important;       /* Header ke thoda niche */
+    right: 20px !important;     /* Right side alignment */
+    width: 300px !important;
+    background: #0f172a !important; 
+    border: 1px solid #334155; 
+    border-radius: 16px; 
+    padding: 20px; 
+    z-index: 9999 !important; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Ensure right-stack (Quick Links) fixed rahe */
+.right-stack {
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+}
+
+/* Select Box: Solid background for high contrast */
+select {
+    background: #0f172a !important; /* Dark solid color */
+    color: #ffffff !important;
+    border: 1px solid #334155 !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+    font-weight: 500;
+}
+/* Reset button hover effect */
+#filterDrawer button:last-child {
+    background: transparent !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text-soft) !important;
+}
+
+/* Filter button ko 'chip' jaisa look dene ke liye */
+.btn-filter-chip {
+    padding: 8px 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text-soft);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Jab click ho toh highlight (active) effect */
+.btn-filter-chip.active {
+    background: var(--gradient-main);
+    color: white;
+    border: none;
+}
+
+/* Mobile responsive drawer overlay */
+.hidden-drawer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8); /* Background darken karo */
+    z-index: 9999;
+}
+
+.verified-badge {
+    background: #dcfce7;
+    color: #166534;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+}
+.verify-btn {
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.answer-card {
+    background: var(--bg-card, #1e293b);
+    transition: transform 0.2s;
+}
+.answer-card:hover {
+    border-color: #8b5cf6 !important;
+}
+
+/* 📱 SMART UTILITY MATRIX FOR COMPACT BUTTONS ON MOBILE */
+@media (max-width: 480px) {
+    .compact-action-btn, 
+    .vote-btn,
+    .answer-actions button {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+        flex-grow: 1 !important; /* Mobile grid layout auto balance */
+        text-align: center;
+        justify-content: center;
+    }
+    
+    .inline-comment-form input {
+        font-size: 12px !important;
+    }
+}
+
+/* ==========================================================================
+   📱 MOBILE BUTTONS ALIGNER MATRIX (STRICT SINGLE LINE)
+   ========================================================================== */
+@media (max-width: 480px) {
+    /* Main actions container wrapper grid control */
+    .answer-actions.flex-button-container {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important; /* Ek hi line mein force karega */
+        gap: 6px !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+    
+    /* Dynamic individual button matrix stabilization */
+    .answer-actions.flex-button-container button,
+    .answer-actions.flex-button-container .vote-btn,
+    .answer-actions.flex-button-container .btn-secondary {
+        flex: 1 !important; /* Teeno buttons ko exact barabar width dega */
+        padding: 6px 4px !important; /* Touch bounds match metrics */
+        font-size: 11.5px !important; /* Text wrapping issues clear krne ke liye */
+        white-space: nowrap !important; /* Text niche wrap na ho break hoke */
+        text-align: center !important;
+        justify-content: center !important;
+        display: inline-flex !important;
+        align-items: center;
+    }
+}

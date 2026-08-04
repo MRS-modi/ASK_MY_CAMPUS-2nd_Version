@@ -72,9 +72,12 @@
   margin-top:4px;
 }
 
-.answer-content{
-  color:var(--text-soft);
-  line-height:1.8;
+/* --- AI and User Answer Text Formatting --- */
+.answer-content {
+    line-height: 1.6;        /* Lines ke beech mein professional gap ke liye */
+    white-space: pre-wrap;   /* Line breaks aur spacing ko visually preserve karne ke liye */
+    font-size: 0.95rem;      /* Text ko visually smooth aur highly readable banane ke liye */
+    color: #cbd5e1;          /* Light slate gray taaki dark theme par eyes ko comfortable lage */
 }
 
 .answer-actions{

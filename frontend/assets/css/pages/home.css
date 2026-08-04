@@ -8,34 +8,48 @@
   margin-top:26px;
 }
 
-.home-header-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  margin-bottom:18px;
-  flex-wrap:wrap;
+.home-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
-.filter-chips{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Chips aur Button ke beech gap */
 }
 
-.filter-chip{
-  padding:10px 16px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background:rgba(255,255,255,0.04);
-  color:var(--text-main);
+.filter-chips {
+    display: flex;
+    gap: 8px; /* Chips ke beech gap */
+    align-items: center;
 }
 
-.filter-chip.active{
-  background:var(--gradient-main);
-  color:#fff;
-  border:none;
+.filter-chip {
+    padding: 8px 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* This applies the purple highlight when active */
+.filter-chip.active {
+    background: var(--gradient-main);
+    color: white;
+    border: none;
+}
+
+/* Jab light mode active ho, toh border aur dark dikhega */
+body.light .filter-chip {
+    border-color: var(--border);
 }
 
 .side-info-card h3{
@@ -54,9 +68,49 @@
   gap:14px;
 }
 
-@media (max-width:700px){
-  .home-header-row{
-    flex-direction:column;
-    align-items:flex-start;
-  }
+@media (max-width: 600px) {
+    .home-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
 }
+
+/* Cards ko visible banane ke liye styling */
+.question-card {
+    background-color: var(--bg-card-solid);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    transition: transform 0.2s, border-color 0.2s;
+    color: var(--text-main);
+}
+
+.question-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+/* Tag pill ki visibility fix karo */
+.tag-pill {
+    background: var(--bg-soft);
+    color: var(--text-soft);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.feedback-box {
+    margin-top: 15px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+#questionsList {
+    display: flex;
+    flex-direction: column; /* Normal order */
+}
+/* Agar sorting logic fail ho jaye, tabhi ye use karna: */
+/* flex-direction: column-reverse; */

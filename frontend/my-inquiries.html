@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ask My Campus - My Inquiries</title>
@@ -49,11 +55,28 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      if (typeof loadMyInquiries === "function") {
-        loadMyInquiries();
-      }
-    });
-  </script>
+document.addEventListener("DOMContentLoaded", async () => {
+    // 1. Layout Load (Sabse pehle, taaki flicker khatam ho jaye)
+    await loadBaseLayout();
+
+    // 2. Auth Guard: Layout ke baad check karo
+    if (!localStorage.getItem("token")) {
+        window.location.href = "/pages/login.html";
+        return;
+    }
+
+    // 3. Page Specific Logic: Inquiry list load karo
+    try {
+        if (typeof loadMyInquiries === "function") {
+            await loadMyInquiries();
+            console.log("My Inquiries loaded successfully");
+        } else {
+            console.error("loadMyInquiries function nahi mila!");
+        }
+    } catch (err) {
+        console.error("Error loading inquiries:", err);
+    }
+});
+</script>
 </body>
 </html>

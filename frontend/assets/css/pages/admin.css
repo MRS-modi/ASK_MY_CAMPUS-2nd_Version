@@ -65,3 +65,25 @@
     grid-template-columns:1fr;
   }
 }
+
+/* admin.css mein add karo */
+#academicMasterTable table {
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid #334155;
+}
+#academicMasterTable th, #academicMasterTable td {
+    padding: 12px;
+    border-bottom: 1px solid #334155;
+    vertical-align: top;
+}
+
+.queue-card {
+    background: var(--bg-card, #1e293b);
+    padding: 16px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--border-color, #334155);
+}

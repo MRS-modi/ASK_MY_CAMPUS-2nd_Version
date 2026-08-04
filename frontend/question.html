@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ask My Campus - Question Details</title>
@@ -19,6 +24,7 @@
   <script src="assets/js/auth.js"></script>
   <script src="utils/roleGuard.js"></script>
   <script src="assets/js/ui.js" defer></script>
+  <script src="assets/js/questions.js" defer></script> 
   <script src="assets/js/answers.js"></script>
 </head>
 <body>
@@ -30,22 +36,19 @@
 
       <main class="page-content">
         <div class="question-layout">
+          
+          <div id="studentViewQuestionClaimStatusMount"></div>
+
           <section id="questionData" class="card detail-card">
             Loading question...
           </section>
 
           <section class="card answer-editor">
             <h2 class="section-title" style="font-size:1.4rem; margin-bottom:14px;">Write Your Answer</h2>
-
-            <textarea
-              id="answerText"
-              placeholder="Write a clear and helpful answer..."
-            ></textarea>
-
+            <textarea id="answerText" placeholder="Write a clear and helpful answer..."></textarea>
             <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
               <button class="btn-primary" onclick="postAnswer()">Submit Answer</button>
             </div>
-
             <div id="answerMessage" class="message-text"></div>
           </section>
 
@@ -56,7 +59,6 @@
                 <p class="section-subtitle">Community responses appear here.</p>
               </div>
             </div>
-
             <div id="answersList" style="display:flex; flex-direction:column; gap:18px;"></div>
           </section>
         </div>
@@ -64,4 +66,60 @@
     </div>
   </div>
 </body>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadBaseLayout();
+
+    if (!localStorage.getItem("token")) {
+        window.location.href = "/pages/login.html";
+        return;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const questionId = urlParams.get('id');
+
+    if (questionId) {
+        try {
+            if (typeof loadQuestionDetails === 'function') {
+                await loadQuestionDetails(questionId);
+            }
+            if (typeof loadAnswers === 'function') {
+                await loadAnswers(questionId);
+            }
+        } catch (err) {
+            console.error("Data load error:", err);
+            const container = document.getElementById("questionData");
+            if (container) container.innerHTML = `<p style="color:#f87171;">Question load nahi ho saka.</p>`;
+        }
+    } else {
+        console.error("URL mein question ID missing hai!");
+    }
+});
+
+async function postAnswer() {
+    const answerText = document.getElementById("answerText").value.trim();
+    const messageDiv = document.getElementById("answerMessage");
+    const urlParams = new URLSearchParams(window.location.search);
+    const questionId = urlParams.get('id');
+
+    if (!answerText) {
+        if (messageDiv) messageDiv.textContent = "Answer likhna zaruri hai.";
+        return;
+    }
+
+    try {
+        if (messageDiv) messageDiv.textContent = "Posting...";
+        await apiRequest(`/questions/${questionId}/answers`, "POST", { content: answerText });
+        
+        await Swal.fire({ icon: 'success', title: 'Posted!', text: 'Answer submit ho gaya.', timer: 1500 });
+        
+        const textEl = document.getElementById("answerText");
+        if (textEl) textEl.value = "";
+        if (typeof loadAnswers === 'function') await loadAnswers(questionId);
+    } catch (err) {
+        if (messageDiv) messageDiv.textContent = "Failed to post answer.";
+        console.error(err);
+    }
+}
+</script>
 </html>

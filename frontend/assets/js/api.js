@@ -1,4 +1,6 @@
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "https://overlook-virtual-shrubbery.ngrok-free.dev";
+
+//const API_BASE = "http://127.0.0.1:8000";
 
 async function apiRequest(endpoint, method = "GET", data = null) {
   const token = localStorage.getItem("token");
@@ -19,6 +21,16 @@ async function apiRequest(endpoint, method = "GET", data = null) {
   }
 
   const response = await fetch(API_BASE + endpoint, options);
+
+  // --- Yahan update karo ---
+  // Agar Backend se 401 Unauthorized aaye, toh token invalid hai
+  if (response.status === 401) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("amc_user");
+    window.location.href = "login.html"; // Forceful redirection
+    throw new Error("Session expired. Please login again.");
+  }
+  // -------------------------
 
   let result = {};
   try {

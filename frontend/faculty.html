@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ask My Campus - Faculty Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages/admin.css" /> 
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="assets/js/darkmode.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="utils/roleGuard.js"></script>
+  <script src="assets/js/ui.js" defer></script>
+  <script src="assets/js/faculty.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <div id="sidebarMount"></div>
+
+    <div class="main-shell">
+      <div id="navbarMount"></div>
+
+      <main class="page-content">
+        <div id="autoEscalationAlertBanner" class="card" style="display:none; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); border: 1px solid #ef4444; padding: 16px; margin-bottom: 20px; border-radius: 8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h4 style="color:#fca5a5; margin:0; font-size:15px; font-weight:700;">🚨 AUTO-ESCALATION NOTICE PANEL</h4>
+              <p style="color:#fecdd3; margin:4px 0 0 0; font-size:13px;">High-Risk Activity detected! Certain questions under your curriculum received consecutive critical flag reports.</p>
+            </div>
+            <button onclick="switchFacultyTab('reviews')" style="background:#ef4444; color:#fff; border:none; padding:6px 12px; border-radius:4px; font-weight:700; font-size:12px; cursor:pointer;">Review Threats</button>
+          </div>
+        </div>
+
+        <div class="hero-card" style="margin-bottom:24px; background: linear-gradient(135deg, #1e1b4b 0%, #2e1065 100%);">
+          <h1 class="hero-title" style="font-size:2rem;">Faculty Dashboard</h1>
+          <p class="hero-text">
+            Monitor assigned academic courses streams, claims tokens, track student responses, and regulate discussions filters.
+          </p>
+        </div>
+
+        <section class="admin-grid">
+          <div class="stat-card">
+            <div class="stat-label">Assigned Questions</div>
+            <div class="stat-value" id="facultyAssignedQuestions">--</div>
+            <div class="stat-line" style="background:#8b5cf6;"></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">My Active Claims</div>
+            <div class="stat-value" id="facultyTotalClaims">--</div>
+            <div class="stat-line" style="background:#3b82f6;"></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Verified Answers Count</div>
+            <div class="stat-value" id="facultyVerifiedAnswers">--</div>
+            <div class="stat-line" style="background:#10b981;"></div>
+          </div>
+        </section>
+
+        <div class="admin-tab-bar" style="margin: 24px 0 20px 0; display:flex; gap:4px; border-bottom:1px solid var(--border-color, #334155); padding-bottom:12px; flex-wrap:wrap;">
+          <button class="filter-chip active" id="assignedTabBtn" onclick="switchFacultyTab('assigned')" style="cursor:pointer; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; transition:all 0.2s;">📚 Assigned Course Doubts</button>
+          <button class="filter-chip" id="reviewsTabBtn" onclick="switchFacultyTab('reviews')" style="cursor:pointer; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; transition:all 0.2s;">🔍 Pending Reviews</button>
+          <button class="filter-chip" id="insightsTabBtn" onclick="switchFacultyTab('insights')" style="cursor:pointer; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; transition:all 0.2s;">📈 Performance Insights</button>
+          <button class="filter-chip" id="discussionsTabBtn" onclick="switchFacultyTab('discussions')" style="cursor:pointer; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; transition:all 0.2s;">💬 Live Discussions Feed</button>
+        </div>
+
+        <div id="assignedSection" class="admin-tab-content">
+          <section class="admin-section">
+            <div class="home-header-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+              <div>
+                <h2 class="section-title" style="margin-bottom:0;">Assigned Course Feeds</h2>
+                <p class="section-subtitle">Real-time doubts stream matching your designated courses scope.</p>
+              </div>
+              
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label style="color:var(--text-soft); font-size:13px; font-weight:600;">Stream Scope:</label>
+                <select id="facultyCourseScopeSelector" onchange="loadAssignedCourseDoubtsPipeline()" style="padding:8px 12px; background:#0f172a; color:#fff; border:1px solid var(--border-color, #334155); border-radius:6px; font-size:13px; font-weight:600; min-width: 220px;">
+                  <option value="assigned">My Assigned Courses (All Mixed)</option>
+                  <option value="all">Explore All Campus Streams (Global)</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="facultyAssignedDoubtsContainer" style="display:flex; flex-direction:column; gap:12px;">
+              <p style="color:var(--text-soft);">Loading questions...</p>
+            </div>
+          </section>
+        </div>
+
+        <div id="reviewsSection" class="admin-tab-content" style="display: none;">
+          <section class="admin-section">
+            <h2 class="section-title">Content Verification Queue</h2>
+            <p class="section-subtitle" style="margin-bottom:16px;">Approve or verify responses submitted across your department domain fields.</p>
+            <div id="facultyReviewsQueueContainer" style="display:flex; flex-direction:column; gap:12px;">
+              <p style="color:var(--text-soft);">Loading unverified responses...</p>
+            </div>
+          </section>
+        </div>
+
+        <div id="insightsSection" class="admin-tab-content" style="display: none;">
+          <section class="admin-section">
+            <h2 class="section-title">Gamified Statistics & Metrics</h2>
+            <div id="facultyGamifiedInsightsBox" style="margin-top:15px;"></div>
+          </section>
+        </div>
+
+        <div id="discussionsSection" class="admin-tab-content" style="display: none;">
+          <section class="admin-section">
+            <h2 class="section-title">Active Conversations & Comment Streams</h2>
+            <p class="section-subtitle" style="margin-bottom:16px;">Tracks trace follow-up replies and alerts inside answers posted by you.</p>
+            <div id="facultyLiveCommentsTrackingBox" style="display:flex; flex-direction:column; gap:10px;">
+              <p style="color:var(--text-soft);">Syncing conversation pipelines...</p>
+            </div>
+          </section>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</body>
+</html>

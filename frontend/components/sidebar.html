@@ -6,12 +6,19 @@
 
   <nav class="sidebar-nav">
     <a class="sidebar-link" href="index.html">🏠 <span>Home</span></a>
+    <a class="sidebar-link" href="leaderboard.html">🏆 <span>Leaderboard</span></a>
     <a class="sidebar-link" href="ask.html">❓ <span>Ask Question</span></a>
     <a class="sidebar-link" href="my-questions.html">📄 <span>My Questions</span></a>
     <a class="sidebar-link" href="saved.html">⭐ <span>Saved Questions</span></a>
-    <a class="sidebar-link" href="notifications.html">🔔 <span>Notifications</span></a>
     <a class="sidebar-link" href="inquiry.html">📩 <span>Official Inquiry</span></a>
-    <a class="sidebar-link" href="my-inquiries.html">🗂 <span>My Inquiries</span></a>
-    <a class="sidebar-link" href="admin.html" data-role="admin">⚙ <span>Admin Panel</span></a>
+    <a class="sidebar-link" href="my-inquiries.html">🪧 <span>My Inquiries</span></a>
+    <a class="sidebar-link" href="admin.html" data-role="admin">🪪 <span>Admin Panel</span></a>
+    <a class="sidebar-link" href="faculty.html" data-role="faculty">🎓 <span>Faculty Dashboard</span></a>
   </nav>
+
+  <div class="sidebar-footer">
+    <a class="sidebar-link" href="notifications.html">🔔 Notifications</a>
+    <a class="sidebar-link" href="#" onclick="openMyPersonalProfileModal()">👤 My Profile</a>
+    <button class="btn-secondary" id="mobileLogoutBtn" onclick="logout()">Logout</button>
+  </div>
 </aside>

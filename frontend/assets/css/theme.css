@@ -99,3 +99,17 @@ img{
   max-width:100%;
   display:block;
 }
+
+/* Force visibility in Light Mode */
+body.light .question-card, 
+body.light .card, 
+body.light .side-info-card {
+    background-color: var(--bg-card-solid) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border) !important;
+}
+
+body.light .stat-card {
+    background-color: var(--bg-card-solid) !important;
+    color: var(--text-main) !important;
+}

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ask My Campus - Admin Panel</title>
@@ -14,6 +17,7 @@
   <link rel="stylesheet" href="assets/css/components.css" />
   <link rel="stylesheet" href="assets/css/pages/admin.css" />
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="assets/js/darkmode.js"></script>
   <script src="assets/js/api.js"></script>
   <script src="assets/js/auth.js"></script>
@@ -56,74 +60,224 @@
           </div>
         </section>
 
-        <section class="admin-section">
-          <div class="home-header-row">
-            <div>
-              <h2 class="section-title" style="margin-bottom:0;">Users Management</h2>
-              <p class="section-subtitle">Promote and manage user roles.</p>
+        <div class="admin-tab-bar" style="margin: 24px 0 20px 0; display:flex; gap:4px; border-bottom:1px solid var(--border-color, #334155); padding-bottom:12px; flex-wrap:wrap;">
+          <button class="filter-chip active" id="usersTabBtn" onclick="switchAdminTab('users')" style="cursor:pointer; background:var(--bg-card, #1e293b); border:1px solid var(--border-color, #334155); color:#fff; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; font-family:'Inter'; transition:all 0.2s;">👥 Users Management</button>
+          <button class="filter-chip" id="inquiriesTabBtn" onclick="switchAdminTab('inquiries')" style="cursor:pointer; background:transparent; border:1px solid transparent; color:#94a3b8; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; font-family:'Inter'; transition:all 0.2s;">📨 Inquiries Management</button>
+          <button class="filter-chip" id="reportsTabBtn" onclick="switchAdminTab('reports')" style="cursor:pointer; background:transparent; border:1px solid transparent; color:#94a3b8; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; font-family:'Inter'; transition:all 0.2s;">🚩 Reported Doubts</button>
+          <button class="filter-chip" id="wordsTabBtn" onclick="switchAdminTab('words')" style="cursor:pointer; background:transparent; border:1px solid transparent; color:#94a3b8; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; font-family:'Inter'; transition:all 0.2s;">🚫 Forbidden Words</button>
+          <button class="filter-chip" id="academicsTabBtn" onclick="switchAdminTab('academics')" style="cursor:pointer; background:transparent; border:1px solid transparent; color:#94a3b8; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; font-family:'Inter'; transition:all 0.2s;">🎓 Academic Master</button>
+          <button class="filter-chip" id="moderationTabBtn" onclick="switchAdminTab('moderation')" style="cursor:pointer; background:transparent; border:1px solid transparent; color:#94a3b8; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; font-family:'Inter'; transition:all 0.2s;">🔍 Moderation Queue</button>
+          <button class="filter-chip" id="facultyTrackerTabBtn" onclick="switchAdminTab('facultyTracker')" style="cursor:pointer; background:transparent; border:1px solid transparent; color:#94a3b8; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; font-family:'Inter'; transition:all 0.2s;">📊 Faculty Activity Tracker</button>
+          <button class="filter-chip" id="logsTabBtn" onclick="switchAdminTab('logs')" style="cursor:pointer; background:transparent; border:1px solid transparent; color:#94a3b8; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; font-family:'Inter'; transition:all 0.2s;">📜 Audit Logs</button>
+        </div>
+
+        <div id="usersSection" class="admin-tab-content">
+          <section class="admin-section">
+            <div class="home-header-row">
+              <div>
+                <h2 class="section-title" style="margin-bottom:0;">Users Management</h2>
+                <p class="section-subtitle">Promote and manage user roles.</p>
+              </div>
             </div>
-          </div>
 
-          <div class="admin-table-wrap">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="adminUsersTableBody">
-                <tr>
-                  <td colspan="5">Loading users...</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="admin-section" style="margin-top:26px;">
-          <div class="home-header-row">
-            <div>
-              <h2 class="section-title" style="margin-bottom:0;">Inquiry Management</h2>
-              <p class="section-subtitle">Review and update inquiry statuses.</p>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminUsersTableBody">
+                  <tr>
+                    <td colspan="5">Loading users...</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-          </div>
+          </section>
+        </div>
 
-          <div class="admin-table-wrap">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Student</th>
-                  <th>Department</th>
-                  <th>Subject</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="adminInquiryTableBody">
-                <tr>
-                  <td colspan="6">Loading inquiries...</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+        <div id="inquiriesSection" class="admin-tab-content" style="display: none;">
+          <section class="admin-section">
+            <div class="home-header-row">
+              <div>
+                <h2 class="section-title" style="margin-bottom:0;">Inquiry Management</h2>
+                <p class="section-subtitle">Review and update inquiry statuses.</p>
+              </div>
+            </div>
+
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Student</th>
+                    <th>Department</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="adminInquiryTableBody">
+                  <tr>
+                    <td colspan="6">Loading inquiries...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <div id="reportsSection" class="admin-tab-content" style="display: none;">
+          <section class="admin-section">
+            <div class="home-header-row">
+              <div>
+                <h2 class="section-title" style="margin-bottom:0;">Reported Content Queue</h2>
+                <p class="section-subtitle">Review community flagged doubts sorted by reports frequency weight.</p>
+              </div>
+            </div>
+
+            <div id="reportedItemsQueue" style="display:flex; flex-direction:column; gap:12px; margin-top:15px;"></div>
+          </section>
+        </div>
+
+        <div id="wordsSection" class="admin-tab-content" style="display: none;">
+          <section class="admin-section">
+            <div class="home-header-row">
+              <div>
+                <h2 class="section-title" style="margin-bottom:0;">Abusive Profanity Shield Rules</h2>
+                <p class="section-subtitle">Add or drop restricted words that should automatically render to blacklisted text layers.</p>
+              </div>
+            </div>
+
+            <div class="card" style="padding:20px; background:var(--bg-card, #1e293b); border:1px solid var(--border-color, #334155); border-radius:8px; margin-top:15px;">
+              <div style="display:flex; gap:10px; margin-bottom:20px;">
+                <input type="text" id="newBannedWordInput" placeholder="Enter word to restrict... (e.g., spammer)" style="flex:1; padding:10px; border-radius:6px; border:1px solid var(--border-color, #334155); background:#0f172a; color:#fff; font-family:'Inter'; font-size:14px;" />
+                <button onclick="submitNewBannedWordPipeline()" style="background:var(--accent-color, #a78bfa); color:#fff; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:700; font-family:'Inter';">➕ Add Rule</button>
+              </div>
+
+              <div id="adminBannedWordsChipsBox" style="display:flex; gap:8px; flex-wrap:wrap; padding:10px 0;"></div>
+            </div>
+          </section>
+        </div>
+
+        <div id="academicsSection" class="admin-tab-content" style="display: none;">
+          <section class="admin-section">
+            <h2 class="section-title">Academic Master Control</h2>
+            
+            <div class="card" style="padding:20px; margin-top:15px;">
+              <select id="academicActionSelect" onchange="updateAcademicUI()" style="width:100%; padding:10px; background:#0f172a; color:#fff; border:1px solid #334155; border-radius:6px; margin-bottom:15px;">
+                <option value="">-- Select Action --</option>
+                <option value="add-department">Add Department</option>
+                <option value="add-branch">Add Branch</option>
+                <option value="add-course">Add Course</option>
+                <option value="link-faculty">Link Faculty</option>
+                <option value="add-notice">Add Calendar Notice</option>
+              </select>
+
+              <div id="dynamicFields" style="display:none; gap:10px; flex-direction:column;">
+                <input type="text" id="academicInput" placeholder="Enter value..." style="padding:10px; border-radius:6px; background:#0f172a; color:#fff; border:1px solid #334155;" />
+                <button onclick="executeAcademicAction()" style="background:#8b5cf6; color:white; padding:10px; border:none; border-radius:6px; cursor:pointer;">Submit</button>
+              </div>
+            </div>
+
+            <div style="margin-top:30px; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="color:white; margin: 0;">Current Academic Structure</h3>
+                <button onclick="loadAcademicMasterTable()" style="cursor:pointer; padding:6px 12px; background:#4f46e5; color:white; border:none; border-radius:4px; font-size:12px;">
+                    🔄 Refresh Table
+                </button>
+            </div>
+            <div id="academicMasterTable" style="margin-top:10px; background:#1e293b; padding:15px; border-radius:8px; color:white; font-size:13px;"></div>
+
+            <h3 style="margin-top:30px; color:white;">Active Notices</h3>
+            <div id="academicNoticesList" style="margin-top:10px; background:#1e293b; padding:15px; border-radius:8px;"></div>
+
+            <div class="card" style="margin-top:20px; padding:20px;">
+                <h3>Bulk Upload Courses (CSV/XLSX)</h3>
+                <input type="file" id="csvFile" accept=".csv, .xlsx, .xls" />
+                <button onclick="uploadCSV()" style="background:#10b981; color:white; padding:8px 15px; border:none; cursor:pointer;">Upload CSV</button>
+            </div>
+          </section>
+        </div>
+
+        <div id="moderationSection" class="admin-tab-content" style="display: none;">
+          <section class="admin-section">
+            <div class="home-header-row">
+              <div>
+                <h2 class="section-title" style="margin-bottom:0;">Moderation Queue</h2>
+                <p class="section-subtitle">Uncategorized questions ko assign karo.</p>
+              </div>
+              <button onclick="loadModerationQueue()" style="cursor:pointer; padding:6px 12px; background:#6366f1; color:white; border:none; border-radius:4px;">🔄 Refresh</button>
+            </div>
+            
+            <div id="moderationQueue" style="margin-top:20px; display:flex; flex-direction:column; gap:10px;"></div>
+          </section>
+        </div>
+
+        <div id="facultyTrackerSection" class="admin-tab-content" style="display: none;">
+          <section class="admin-section">
+            <div class="home-header-row" style="margin-bottom:15px;">
+              <div>
+                <h2 class="section-title" style="margin-bottom:0;">Faculty Activity & Performance Tracker</h2>
+                <p class="section-subtitle">Real-time audit log tracking total doubts claimed and answers authenticated by professors.</p>
+              </div>
+              <button onclick="loadAdminFacultyTrackerMatrix()" style="cursor:pointer; padding:6px 12px; background:#10b981; color:white; border:none; border-radius:4px; font-weight:600;">🔄RefreshLedger</button>
+            </div>
+            
+            <div id="adminFacultyTrackerSection"></div>
+          </section>
+        </div>
+
+        <div id="logsSection" class="admin-tab-content" style="display: none;">
+          <section class="admin-section">
+            <div class="home-header-row">
+              <div>
+                <h2 class="section-title" style="margin-bottom:0;">System Audit Logs</h2>
+                <p class="section-subtitle">Admin actions ka full history record.</p>
+              </div>
+              <button onclick="loadAuditLogs()" style="cursor:pointer; padding:6px 12px; background:#4f46e5; color:white; border:none; border-radius:4px;">🔄 Refresh Logs</button>
+            </div>
+            
+            <div class="admin-table-wrap" style="margin-top:20px;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Admin ID</th>
+                    <th>Action</th>
+                    <th>Target ID</th>
+                    <th>Details</th>
+                    <th>Timestamp</th>
+                  </tr>
+                </thead>
+                <tbody id="adminLogsTableBody">
+                  <tr><td colspan="5">Logs loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
       </main>
     </div>
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      if (typeof loadAdminDashboard === "function") {
+document.addEventListener("DOMContentLoaded", async () => {
+    // 1. Layout Load (Must have)
+    await loadBaseLayout();
+    applyRoleVisibility();
+
+    // 2. Admin Dashboard Load
+    if (typeof loadAdminDashboard === "function") {
         loadAdminDashboard();
-      } else {
-        console.error("loadAdminDashboard function not found");
-      }
-    });
-  </script>
+    } else {
+        console.error("loadAdminDashboard function missing!");
+    }
+});
+</script>
 </body>
 </html>
