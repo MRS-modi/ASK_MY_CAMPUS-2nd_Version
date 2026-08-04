@@ -31,6 +31,7 @@ class AnswerResponse(BaseModel):
     created_at: datetime
     votes_count: int
     has_voted: bool = False
+    comments: list = []
 
     class Config:
         from_attributes = True

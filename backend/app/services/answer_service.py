@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-
+from sqlalchemy.orm import joinedload
 from app.models.answer import Answer
 from app.models.question import Question
 from app.models.user import User
@@ -50,6 +50,20 @@ def delete_answer(db: Session, answer: Answer):
 
 
 def verify_answer(db: Session, answer: Answer) -> Answer:
+    # Pehle find kar lete hain ki answer dene wala student kaun hai
+    author = db.query(User).filter(User.id == answer.author_id).first()
+    
+    # Toggle logic chalne se pehle state check kar rahe hain
+    if not answer.is_verified:
+        # 👇 1. VERIFIED STATUS ADDED: Student ko +20 points milenge
+        if author:
+            author.reputation_points += 20
+    else:
+        # 👇 2. VERIFIED STATUS REMOVED: Student ke profile se -20 points hatenge
+        if author:
+            author.reputation_points = max(0, author.reputation_points - 20)
+
+    # Tumhara purana status toggle code as it is chalega
     answer.is_verified = not answer.is_verified
     db.commit()
     db.refresh(answer)
@@ -64,3 +78,32 @@ def accept_answer(db: Session, answer: Answer) -> Answer:
     db.commit()
     db.refresh(answer)
     return answer
+
+def get_all_questions(db: Session):
+    """
+    Saare questions nikalne ke liye complete with author aur unke tags relationships
+    """
+    return (
+        db.query(Question)
+        .options(
+            joinedload(Question.author),
+            joinedload(Question.tag_relations)
+        )
+        .order_by(Question.created_at.desc())
+        .all()
+    )
+
+def get_my_questions(db: Session, user_id: int):
+    """
+    Specific user ke questions complete components ke sath load karne ke liye
+    """
+    return (
+        db.query(Question)
+        .filter(Question.author_id == user_id)
+        .options(
+            joinedload(Question.author),
+            joinedload(Question.tag_relations)
+        )
+        .order_by(Question.created_at.desc())
+        .all()
+    )

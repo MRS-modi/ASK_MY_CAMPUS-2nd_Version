@@ -1,8 +1,11 @@
+from app.schemas.admin import AdminActionResponse
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.core.dependencies import get_current_user, get_db
 from app.models.user import User
+from app.models.answer import Answer
+from app.models.comment import Comment
 from app.schemas.answer import (
     ActionMessageResponse,
     AnswerCreate,
@@ -29,6 +32,17 @@ def serialize_answer(answer, db: Session, current_user: User | None = None) -> A
     if current_user:
         voted = has_user_voted(db, answer.id, current_user.id)
 
+    # Comments logic
+    comment_data = []
+    # Relationship use karo, agar 'comments' define hai
+    if hasattr(answer, 'comments'):
+        for c in answer.comments:
+            comment_data.append({
+                "id": c.id, 
+                "author_name": c.author.name if c.author else "Deleted User", 
+                "content": c.content
+            })
+
     return AnswerResponse(
         id=answer.id,
         content=answer.content,
@@ -41,6 +55,7 @@ def serialize_answer(answer, db: Session, current_user: User | None = None) -> A
         created_at=answer.created_at,
         votes_count=count_votes(db, answer.id),
         has_voted=voted,
+        comments=comment_data # Ab ye schema ke saath match karega
     )
 
 
@@ -87,9 +102,17 @@ def list_answers(
             detail="Question not found."
         )
 
-    answers = get_answers_by_question(db, question_id)
+    # Ab Answer aur Comment dono define hain, error nahi aayega
+    answers = (
+        db.query(Answer)
+        .filter(Answer.question_id == question_id)
+        .options(
+            joinedload(Answer.comments).joinedload(Comment.author)
+        )
+        .all()
+    )
+    
     return [serialize_answer(answer, db, current_user) for answer in answers]
-
 
 @router.delete("/answers/{answer_id}", response_model=ActionMessageResponse)
 def remove_answer(
@@ -155,6 +178,7 @@ def verify_answer_route(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    # Authorization Check
     if current_user.role not in ["teacher", "admin"]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -168,9 +192,14 @@ def verify_answer_route(
             detail="Answer not found."
         )
 
-    updated = verify_answer(db, answer)
+    # Verification Logic
+    answer.is_verified = True
+    answer.verified_by_id = current_user.id
+    db.commit()
+    db.refresh(answer)
 
-    if updated.is_verified and answer.author_id != current_user.id:
+    # Notification Logic
+    if answer.author_id != current_user.id:
         create_notification(
             db=db,
             user_id=answer.author_id,
@@ -181,8 +210,7 @@ def verify_answer_route(
             related_answer_id=answer.id,
         )
 
-    return serialize_answer(updated, db, current_user)
-
+    return serialize_answer(answer, db, current_user)
 
 @router.patch("/answers/{answer_id}/accept", response_model=AnswerResponse)
 def accept_answer_route(

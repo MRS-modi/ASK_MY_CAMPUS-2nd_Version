@@ -1,5 +1,12 @@
+import os
+
 from fastapi import FastAPI
+from fastapi import Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from starlette.responses import FileResponse
+from fastapi.responses import FileResponse
+from starlette.responses import RedirectResponse
 
 from app.core.config import settings
 from app.core.database import Base, engine
@@ -17,6 +24,8 @@ from app.routes.notifications import router as notifications_router
 from app.routes.questions import router as questions_router
 from app.routes.saved import router as saved_router
 from app.routes.admin import router as admin_router
+from app.routes.comments import router as comments_router
+from app.routes.faculty import router as faculty_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -32,11 +41,13 @@ app.add_middleware(
         "http://localhost:5500",
         "http://127.0.0.1:5501",
         "http://localhost:5501",
+        "https://overlook-virtual-shrubbery.ngrok-free.dev"
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+assets_path = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "assets")
 
 app.include_router(auth_router)
 app.include_router(questions_router)
@@ -45,15 +56,20 @@ app.include_router(saved_router)
 app.include_router(notifications_router)
 app.include_router(inquiries_router)
 app.include_router(admin_router)
+app.include_router(comments_router)
+app.include_router(faculty_router)
+app.include_router(admin_router, prefix="/admin", tags=["Admin"])
+app.include_router(auth_router, prefix="/auth")
 
+
+## Purane duplicate root/mounts hata kar ye rakho:
+app.mount("/assets", StaticFiles(directory="../frontend/assets"), name="assets")
+app.mount("/components", StaticFiles(directory="../frontend/components"), name="components")
+app.mount("/pages", StaticFiles(directory="../frontend", html=True), name="frontend")
 
 @app.get("/")
-def root():
-    return {
-        "message": f"Welcome to {settings.APP_NAME}",
-        "status": "running"
-    }
-
+def redirect_to_login():
+    return RedirectResponse(url="/pages/login.html")
 
 @app.get("/health")
 def health_check():
@@ -61,3 +77,10 @@ def health_check():
         "success": True,
         "environment": settings.APP_ENV
     }
+
+# app/main.py mein startup event mein dal do
+@app.on_event("startup")
+def startup_event():
+    from app.core.database import engine, Base
+    Base.metadata.create_all(bind=engine)
+    print("Tables created in Supabase PostgreSQL!")

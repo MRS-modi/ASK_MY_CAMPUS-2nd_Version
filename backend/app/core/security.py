@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
+import re  
 
 from jose import jwt
 from passlib.context import CryptContext
@@ -29,3 +30,26 @@ def create_access_token(subject: str, expires_minutes: Optional[int] = None) -> 
     }
 
     return jwt.encode(payload, settings.SECRET_KEY, algorithm=ALGORITHM)
+
+
+# 👑 🔒 ✅ MEMORY GLOBAL CONTROLLER: Baseline words tracking catalog
+BANNED_WORDS = ["scam", "cheat", "abuse"]
+
+
+def censor_content(text_content: str) -> str:
+    """
+    Automatic Compliance Scanner: Global BANNED_WORDS list ko access karke 
+    saare restricted terms ko asterisks (****) me convert karta h case-insensitively.
+    """
+    if not text_content or not isinstance(text_content, str):
+        return text_content
+        
+    cleaned_text = text_content
+    for word in BANNED_WORDS:
+        word_len = len(word)
+        asterisks = "*" * word_len
+        
+        insensitive_pattern = re.compile(re.escape(word), re.IGNORECASE)
+        cleaned_text = insensitive_pattern.sub(asterisks, cleaned_text)
+        
+    return cleaned_text
