@@ -38,9 +38,8 @@ app.add_middleware(
         "http://127.0.0.1:5501",
         "http://localhost:5501",
         "https://ask-my-campus.netlify.app",
-        "https://askmycampus-2ndversion-frontend.vercel.app",
+        "https://askmycampus-2ndversion-frontend.vercel.app"
     ],
-    allow_origin_regex=r"https://.*\.vercel\.app",  # Fallback for preview/production Vercel URLs
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
