@@ -29,7 +29,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Robust Production CORS Setup
+# Explicitly wildcard all origins and origins with reg-ex to eliminate Vercel preflight fails
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -38,14 +38,15 @@ app.add_middleware(
         "http://127.0.0.1:5501",
         "http://localhost:5501",
         "https://ask-my-campus.netlify.app",
-        "https://askmycampus-2ndversion-frontend.vercel.app"
+        "https://askmycampus-2ndversion-frontend.vercel.app",
+        "https://askmycampus-2ndversion-frontend-git-main-mrs-modis-projects.vercel.app"
     ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Cleaned Single Router Registrations
 app.include_router(auth_router)
 app.include_router(questions_router)
 app.include_router(answers_router)
