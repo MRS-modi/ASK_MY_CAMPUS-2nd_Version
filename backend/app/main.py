@@ -39,8 +39,7 @@ app.add_middleware(
         "http://127.0.0.1:5501",
         "http://localhost:5501",
         "https://ask-my-campus.netlify.app",
-        "https://askmycampus-2ndversion-frontend.vercel.app",  # <--- Aapka naya Vercel frontend
-        "*"
+        "https://askmycampus-2ndversion-frontend.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
