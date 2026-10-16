@@ -38,8 +38,8 @@ app.add_middleware(
         "http://localhost:5500",
         "http://127.0.0.1:5501",
         "http://localhost:5501",
-        "https://overlook-virtual-shrubbery.ngrok-free.dev",
         "https://ask-my-campus.netlify.app",
+        "https://askmycampus-2ndversion-frontend.vercel.app",  # <--- Aapka naya Vercel frontend
         "*"
     ],
     allow_credentials=True,
