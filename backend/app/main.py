@@ -24,13 +24,12 @@ from app.routes.admin import router as admin_router
 from app.routes.comments import router as comments_router
 from app.routes.faculty import router as faculty_router
 
-Base.metadata.create_all(bind=engine)
-
 app = FastAPI(
     title=settings.APP_NAME,
     version="1.0.0"
 )
 
+# Robust Production CORS Setup
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -39,13 +38,15 @@ app.add_middleware(
         "http://127.0.0.1:5501",
         "http://localhost:5501",
         "https://ask-my-campus.netlify.app",
-        "https://askmycampus-2ndversion-frontend.vercel.app"
+        "https://askmycampus-2ndversion-frontend.vercel.app",
     ],
+    allow_origin_regex=r"https://.*\.vercel\.app",  # Fallback for preview/production Vercel URLs
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Cleaned Single Router Registrations
 app.include_router(auth_router)
 app.include_router(questions_router)
 app.include_router(answers_router)
