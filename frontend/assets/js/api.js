@@ -1,7 +1,7 @@
 // Local testing ke waqt localhost, production me Render domain:
 const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
     ? "http://127.0.0.1:8000"
-    : "https://ask-my-campus-backend.onrender.com"; // Render Backend URL
+    : "https://ask-my-campus.onrender.com"; // Render Backend URL
 
 async function apiRequest(endpoint, method = "GET", data = null) {
   const token = localStorage.getItem("token");
