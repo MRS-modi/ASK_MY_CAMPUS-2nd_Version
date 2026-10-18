@@ -55,11 +55,10 @@ def fetch_local_campus_context(db: Session, question_title: str, current_questio
 
 
 async def generate_ai_tags(question_title: str, question_content: str, needed_count: int = 2) -> list[str]:
-    """2️⃣ AUTO-TAGGING ENGINE: Groq High-Speed Parser modified for strict slot fulfillment."""
+    """2️⃣ AUTO-TAGGING ENGINE: Groq High-Speed Parser with High-Limit 8B Model."""
     if not GROQ_API_KEY or not AI_ANSWER_ENABLED or needed_count <= 0:
         return []
 
-    # AI ko explicitly batayenge ki use kitne exact matching tags dene hain
     prompt = (
         f"Analyze this doubt title: '{question_title}' and content: '{question_content}'. "
         f"Return ONLY a comma-separated list of EXACTLY {needed_count} highly relevant, distinct, "
@@ -67,7 +66,7 @@ async def generate_ai_tags(question_title: str, question_content: str, needed_co
     )
     
     payload = {
-        "model": "llama-3.3-70b-versatile",
+        "model": "llama-3.1-8b-instant",  # 🚀 Switched to high rate-limit model
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.2
     }
@@ -81,19 +80,19 @@ async def generate_ai_tags(question_title: str, question_content: str, needed_co
             response = await client.post(GROQ_URL, json=payload, headers=headers, timeout=10.0)
             if response.status_code == 200:
                 text_content = response.json()['choices'][0]['message']['content']
-                # Clean and parse elements
                 ai_tags = [t.strip().replace("#", "").lower() for t in text_content.split(",") if t.strip()]
-                return ai_tags[:needed_count] # Absolute enforcement
+                return ai_tags[:needed_count]
+            else:
+                print(f"⚠️ Groq Auto-Tagging Status {response.status_code}: {response.text}")
     except Exception as e:
         print(f"⚠️ Groq Auto-Tagging network delay: {str(e)}")
     return []
 
 async def generate_ai_suggestion(question_title: str, question_content: str, local_context: str = "") -> str:
-    """3️⃣ CORE AI GENERATOR: Groq Llama-3 Execution Engine with Strict Presentation Control."""
+    """3️⃣ CORE AI GENERATOR: Groq Llama-3.1 8B Instant Execution Engine."""
     if not GROQ_API_KEY or not AI_ANSWER_ENABLED:
         return "AI Assistant is currently offline."
 
-    # System prompt ko force kiya hai taaki wo plain line-breaks aur explicit points use kare
     system_prompt = (
         "You are 'Campus AI', a premium engineering mentor. Your response must be extremely professional, "
         "structured, and clean. DO NOT write long paragraphs. Use clear line breaks and short bullet points. "
@@ -112,12 +111,12 @@ async def generate_ai_suggestion(question_title: str, question_content: str, loc
     """
     
     payload = {
-        "model": "llama-3.3-70b-versatile",
+        "model": "llama-3.1-8b-instant",  # 🚀 Switched to high rate-limit model
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_content}
         ],
-        "temperature": 0.3  # Temperature kam kiya hai taaki response random na ho aur format standard rahe
+        "temperature": 0.3
     }
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
@@ -131,21 +130,20 @@ async def generate_ai_suggestion(question_title: str, question_content: str, loc
                 if response.status_code == 200:
                     raw_content = response.json()['choices'][0]['message']['content'].strip()
                     
-                    # Markdown text ko bina kisi library ke HTML readable spacing aur structural line breaks mein convert karne ka hack
                     formatted_content = (
                         raw_content
-                        .replace("\n", "<br>")          # New lines ko HTML break dena
-                        .replace("### ", "<br><strong>") # Headings ko dynamic weight dena
+                        .replace("\n", "<br>")
+                        .replace("### ", "<br><strong>")
                         .replace("#### ", "<br><strong>")
-                        .replace("**", "<strong>")       # Bold tags support
+                        .replace("**", "<strong>")
                         .replace("<strong>\n", "<strong><br>")
                     )
                     return formatted_content
                 else:
                     print(f"❌ GROQ API ERROR {response.status_code}: {response.text}")
         except Exception as e:
-         print(f"⚠️ Connection attempt {attempt + 1} to Groq failed: {str(e)}")
-    await asyncio.sleep(1.0)
+            print(f"⚠️ Connection attempt {attempt + 1} to Groq failed: {str(e)}")
+        await asyncio.sleep(1.0)
 
     return "Campus AI is temporarily calibrating under heavy workload. Please try checking back later!"
 
