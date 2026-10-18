@@ -55,7 +55,7 @@ def fetch_local_campus_context(db: Session, question_title: str, current_questio
 
 
 async def generate_ai_tags(question_title: str, question_content: str, needed_count: int = 2) -> list[str]:
-    """2️⃣ AUTO-TAGGING ENGINE: Groq High-Speed Parser with High-Limit 8B Model."""
+    """2️⃣ AUTO-TAGGING ENGINE: Groq High-Speed Parser with Free-Tier Llama 3 Model."""
     if not GROQ_API_KEY or not AI_ANSWER_ENABLED or needed_count <= 0:
         return []
 
@@ -66,7 +66,7 @@ async def generate_ai_tags(question_title: str, question_content: str, needed_co
     )
     
     payload = {
-        "model": "llama-3.1-8b-instant",  # 🚀 Switched to high rate-limit model
+        "model": "llama3-8b-8192",  # 🚀 FIXED: Official Groq Free Tier model ID
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.2
     }
@@ -89,7 +89,7 @@ async def generate_ai_tags(question_title: str, question_content: str, needed_co
     return []
 
 async def generate_ai_suggestion(question_title: str, question_content: str, local_context: str = "") -> str:
-    """3️⃣ CORE AI GENERATOR: Groq Llama-3.1 8B Instant Execution Engine."""
+    """3️⃣ CORE AI GENERATOR: Groq Llama3-8B Free Tier Execution Engine."""
     if not GROQ_API_KEY or not AI_ANSWER_ENABLED:
         return "AI Assistant is currently offline."
 
@@ -111,7 +111,7 @@ async def generate_ai_suggestion(question_title: str, question_content: str, loc
     """
     
     payload = {
-        "model": "llama-3.1-8b-instant",  # 🚀 Switched to high rate-limit model
+        "model": "llama3-8b-8192",  # 🚀 FIXED: Official Groq Free Tier model ID
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_content}
