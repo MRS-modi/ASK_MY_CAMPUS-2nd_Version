@@ -23,15 +23,12 @@ async function apiRequest(endpoint, method = "GET", data = null) {
 
   const response = await fetch(API_BASE + endpoint, options);
 
-  // --- Yahan update karo ---
-  // Agar Backend se 401 Unauthorized aaye, toh token invalid hai
   if (response.status === 401) {
     localStorage.removeItem("token");
     localStorage.removeItem("amc_user");
-    window.location.href = "login.html"; // Forceful redirection
+    window.location.href = "login.html"; 
     throw new Error("Session expired. Please login again.");
   }
-  // -------------------------
 
   let result = {};
   try {
@@ -41,7 +38,20 @@ async function apiRequest(endpoint, method = "GET", data = null) {
   }
 
   if (!response.ok) {
-    throw new Error(result.detail || "Request failed");
+    // 🚀 FIXED: Handle FastAPI Validation arrays preventing [object Object]
+    let errorMsg = "Request failed";
+    if (result.detail) {
+        if (typeof result.detail === 'string') {
+            errorMsg = result.detail;
+        } else if (Array.isArray(result.detail)) {
+            errorMsg = result.detail.map(e => e.msg).join(", "); // Extract specific messages
+        } else {
+            errorMsg = JSON.stringify(result.detail);
+        }
+    } else if (result.message) {
+        errorMsg = result.message;
+    }
+    throw new Error(errorMsg);
   }
 
   return result;

@@ -400,9 +400,7 @@ def assign_course(question_id: int, payload: dict, db: Session = Depends(get_db)
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
     
-    # Action log karo
-    action_name = "UNBAN_USER" if user.role == "banned" else "BAN_USER"
-    log_admin_action(db, current_user.id, action_name, user_id, f"Target: {user.name}")
+    # 🚀 FIXED: Removed the buggy 'user' variables that were causing the crash
     # New category assign karo
     question.course_id = payload.get("course_id")
     db.commit()

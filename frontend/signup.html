@@ -90,28 +90,28 @@
             </div>
 
             <div id="deptFieldContainer" class="auth-field" style="grid-column: span 2;">
-  <label class="auth-label">Department</label>
-  <select id="signupDept" class="auth-input" onchange="updateBranchesForSignup()" style="background:#0f172a; color:#fff; width:100%; padding:10px;">
-    <option value="">Select Department</option>
-  </select>
-</div>
+              <label class="auth-label">Department</label>
+              <select id="signupDept" class="auth-input" onchange="updateBranchesForSignup()" style="background:#0f172a; color:#fff; width:100%; padding:10px;">
+                <option value="">Select Department</option>
+              </select>
+            </div>
 
-<div id="branchFieldContainer" class="auth-field">
-  <label class="auth-label">Branch</label>
-  <select id="signupBranch" class="auth-input" style="background:#0f172a; color:#fff; width:100%; padding:10px;">
-    <option value="">Select Branch</option>
-  </select>
-</div>
+            <div id="branchFieldContainer" class="auth-field">
+              <label class="auth-label">Branch</label>
+              <select id="signupBranch" class="auth-input" style="background:#0f172a; color:#fff; width:100%; padding:10px;">
+                <option value="">Select Branch</option>
+              </select>
+            </div>
 
-<div id="yearFieldContainer" class="auth-field">
-  <label class="auth-label">Year</label>
-  <select id="signupYear" class="auth-input" style="background:#0f172a; color:#fff; width:100%; padding:10px;">
-    <option value="1">1st Year</option>
-    <option value="2">2nd Year</option>
-    <option value="3">3rd Year</option>
-    <option value="4">4th Year</option>
-  </select>
-</div>
+            <div id="yearFieldContainer" class="auth-field">
+              <label class="auth-label">Year</label>
+              <select id="signupYear" class="auth-input" style="background:#0f172a; color:#fff; width:100%; padding:10px;">
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+              </select>
+            </div>
 
             <div class="auth-field" style="grid-column: span 2;">
               <label class="auth-label">Enrollment / Employee Number</label>
@@ -149,41 +149,30 @@
       const yearContainer = document.getElementById("yearFieldContainer");
 
       if (role === "teacher") {
-        // Smoothly drop standard inputs out of the view bounds context
         branchContainer.style.display = "none";
         yearContainer.style.display = "none";
         document.getElementById("signupBranch").value = "";
         document.getElementById("signupYear").value = "";
       } else {
-        // Return visibility blocks back to normal grid parameters
         branchContainer.style.display = "block";
         yearContainer.style.display = "block";
       }
     }
 
     async function executeSecureSignupPipeline() {
-    const emailInput = document.getElementById("signupEmail").value.trim().toLowerCase();
-    const password = document.getElementById("signupPassword").value;
-    const confirmPassword = document.getElementById("signupConfirmPassword").value; // Yahan se value uthayega
-    const messageDiv = document.getElementById("authMessage");
-    
-    // NAYA VALIDATION CHECK
-    if (password !== confirmPassword) {
+      const emailInput = document.getElementById("signupEmail").value.trim().toLowerCase();
+      const password = document.getElementById("signupPassword").value;
+      const confirmPassword = document.getElementById("signupConfirmPassword").value;
+      const messageDiv = document.getElementById("authMessage");
+      const role = document.getElementById("signupRoleSelector").value;
+
+      if (messageDiv) messageDiv.textContent = "";
+
+      // Password Match Validation
+      if (password !== confirmPassword) {
         Swal.fire({
-            title: 'Password Mismatch!',
-            text: 'both passwords must match.',
-            icon: 'error',
-            background: '#1e293b',
-            color: '#fff'
-        });
-        return;
-    }
-    if (messageDiv) messageDiv.textContent = "";
-      // 🛡️ FRONTEND COMPLIANCE GUARD: Restrict execution if college id is missing
-      if (!emailInput.endsWith("@mitsgwl.ac.in")) {
-        Swal.fire({
-          title: 'MITS Access Policy',
-          text: 'Bhai, sirf official college ID (@mitsgwl.ac.in) hi register ho sakti h!',
+          title: 'Password Mismatch',
+          text: 'The entered passwords do not match. Please try again.',
           icon: 'error',
           background: '#1e293b',
           color: '#fff',
@@ -192,35 +181,62 @@
         return;
       }
 
-      const role = document.getElementById("signupRoleSelector").value;
-      
+      // Institutional Email Restricting Guard
+      if (!emailInput.endsWith("@mitsgwl.ac.in")) {
+        Swal.fire({
+          title: 'Institutional Access Policy',
+          text: 'Registration is restricted to official college email addresses (@mitsgwl.ac.in).',
+          icon: 'error',
+          background: '#1e293b',
+          color: '#fff',
+          confirmButtonColor: '#f43f5e'
+        });
+        return;
+      }
+
+      const branchVal = document.getElementById("signupBranch").value.trim();
+      const yearVal = document.getElementById("signupYear").value;
+
       const payload = {
         name: document.getElementById("signupName").value.trim(),
         email: emailInput,
-        password: document.getElementById("signupPassword").value,
+        password: password,
         role: role,
-        branch: document.getElementById("signupBranch").value.trim() || "Faculty Department",
-        year: document.getElementById("signupYear").value ? parseInt(document.getElementById("signupYear").value) : 0,
+        branch: branchVal || (role === "teacher" ? "Faculty Department" : "General"),
+        year: yearVal ? parseInt(yearVal) : 0,
         enrollment_number: document.getElementById("signupEnrollment").value.trim(),
         phone: document.getElementById("signupPhone").value.trim(),
         address: document.getElementById("signupAddress").value.trim()
       };
 
-      // Simple validation parameters check lookup
       if (!payload.name || !payload.email || !payload.password || !payload.enrollment_number) {
-        Swal.fire({ text: "Please fill out all mandatory fields.", icon: "warning", background: "#1e293b", color: "#fff" });
+        Swal.fire({
+          title: 'Missing Required Fields',
+          text: 'Please fill in all mandatory fields before creating an account.',
+          icon: 'warning',
+          background: '#1e293b',
+          color: '#fff',
+          confirmButtonColor: '#8b5cf6'
+        });
         return;
       }
 
       try {
         await apiRequest("/auth/register", "POST", payload);
-        await Swal.fire({ title: 'Account Verified!', text: 'Registration complete. Directing to login node...', icon: 'success', background: '#1e293b', color: '#fff', confirmButtonColor: '#a78bfa' });
+        await Swal.fire({
+          title: 'Account Registered!',
+          text: 'Registration completed successfully. Redirecting to login...',
+          icon: 'success',
+          background: '#1e293b',
+          color: '#fff',
+          confirmButtonColor: '#a78bfa'
+        });
         window.location.href = "login.html";
       } catch (err) {
         console.error(err);
         if (messageDiv) {
           messageDiv.style.color = "#f87171";
-          messageDiv.textContent = err.message || "Registration sequence dropped.";
+          messageDiv.textContent = err.message || "Registration sequence failed.";
         }
       }
     }

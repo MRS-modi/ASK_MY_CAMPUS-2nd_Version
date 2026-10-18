@@ -39,7 +39,7 @@ async function fetchCurrentUser() {
     }
 }
 
-// Login Process with State Management
+// Login Process with Role-Based Redirection
 async function loginUser() {
     const message = document.getElementById("authMessage");
     const btn = document.querySelector("button[onclick='loginUser()']");
@@ -62,9 +62,18 @@ async function loginUser() {
         const result = await apiRequest("/auth/login", "POST", payload);
         if (result.access_token) {
             setToken(result.access_token);
-            await fetchCurrentUser();
+            const user = await fetchCurrentUser();
             message.textContent = "Login successful! Redirecting...";
-            window.location.href = "index.html";
+            
+            // Check role or is_faculty flag for redirection
+            const role = (user.role || "").toLowerCase();
+            if (role === "faculty" || role === "teacher" || user.is_faculty === true) {
+                window.location.href = "faculty.html";
+            } else if (role === "admin") {
+                window.location.href = "admin.html";
+            } else {
+                window.location.href = "index.html";
+            }
         }
     } catch (error) {
         message.style.color = "#f87171";
@@ -75,7 +84,9 @@ async function loginUser() {
 
 // Register page load hote hi departments fetch karo
 document.addEventListener("DOMContentLoaded", async () => {
-    await initSignupFilters();
+    if (document.getElementById("signupDept")) {
+        await initSignupFilters();
+    }
 });
 
 async function initSignupFilters() {
@@ -83,10 +94,12 @@ async function initSignupFilters() {
         const data = await apiRequest("/admin/academic/all-data");
         const deptSelect = document.getElementById("signupDept");
         
-        deptSelect.innerHTML = '<option value="">Select Department</option>';
-        data.departments.forEach(d => {
-            deptSelect.innerHTML += `<option value="${d.id}">${d.name}</option>`;
-        });
+        if (deptSelect) {
+            deptSelect.innerHTML = '<option value="">Select Department</option>';
+            data.departments.forEach(d => {
+                deptSelect.innerHTML += `<option value="${d.id}">${d.name}</option>`;
+            });
+        }
         window.allBranches = data.branches; // Global store for branch filtering
     } catch (err) {
         console.error("Signup filter sync failed", err);
@@ -97,12 +110,14 @@ function updateBranchesForSignup() {
     const deptId = document.getElementById("signupDept").value;
     const branchSelect = document.getElementById("signupBranch");
     
-    branchSelect.innerHTML = '<option value="">Select Branch</option>';
-    const filtered = window.allBranches.filter(b => b.dept_id == deptId);
-    
-    filtered.forEach(b => {
-        branchSelect.innerHTML += `<option value="${b.name}">${b.name}</option>`;
-    });
+    if (branchSelect && window.allBranches) {
+        branchSelect.innerHTML = '<option value="">Select Branch</option>';
+        const filtered = window.allBranches.filter(b => b.dept_id == deptId);
+        
+        filtered.forEach(b => {
+            branchSelect.innerHTML += `<option value="${b.name}">${b.name}</option>`;
+        });
+    }
 }
 
 function logoutUser() {

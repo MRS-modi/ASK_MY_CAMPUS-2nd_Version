@@ -7,7 +7,6 @@ async function loadComponent(targetId, filePath) {
     }
     
     try {
-        // Safe check: Agar filePath direct "/" se start ho raha hai aur network error aaye
         const response = await fetch(filePath);
         if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
         
@@ -19,7 +18,6 @@ async function loadComponent(targetId, filePath) {
     } catch (error) {
         console.error(`Failed to load component from: ${filePath}`, error);
         
-        // 🔄 AUTOMATIC FALLBACK: Agar dynamic absolute url block ho, toh relative direct call karo
         if (filePath.startsWith('http')) {
             const relativePath = '/' + filePath.split('/').slice(3).join('/');
             console.log(`Trying fallback relative path: ${relativePath}`);
@@ -54,12 +52,11 @@ function applyThemeIcon() {
   }
 }
 
-// 👤 👑 NAVBAR USER ENGINE (Updated for multi-tab stability)
+// 👤 👑 NAVBAR USER ENGINE
 function applyNavbarUser() {
   const profileName = document.getElementById("profileName");
   const profileAvatar = document.getElementById("profileAvatar");
 
-  // Agar baki tabs par abhi tak elements DOM mein render nahi hue hain, toh thoda wait karke re-try karega
   if (!profileName && !profileAvatar) {
     console.log("Navbar profile elements not found yet, retrying setup...");
     return;
@@ -77,7 +74,6 @@ function applyNavbarUser() {
       profileName.style.textDecoration = "none"; 
       profileName.style.transition = "color 0.2s ease";
       
-      // Duplicate event listeners prevent karne ke liye pehle remove karo (Best Practice)
       profileName.onclick = null; 
       
       profileName.addEventListener("mouseenter", () => { profileName.style.color = "var(--accent-color, #a78bfa)"; });
@@ -151,7 +147,6 @@ function disableBackButton() {
 }
 
 function attachNavbarActions() {
-  // Laptop/Navbar Logout
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
@@ -161,7 +156,6 @@ function attachNavbarActions() {
     });
   }
 
-  // Mobile/Sidebar Logout
   const mobileLogoutBtn = document.getElementById("mobileLogoutBtn");
   if (mobileLogoutBtn) {
     mobileLogoutBtn.addEventListener("click", () => {
@@ -172,6 +166,7 @@ function attachNavbarActions() {
   }
 }
 
+// 👑 🎓 👤 DYNAMIC ROLE VISIBILITY GUARDIAN
 function applyRoleVisibility() {
   const raw = localStorage.getItem("amc_user");
   if (!raw) return;
@@ -179,6 +174,7 @@ function applyRoleVisibility() {
   try {
     const user = JSON.parse(raw);
     const role = (user.role || "").toLowerCase().trim();
+    const isTeacherRole = role === "teacher" || role === "faculty" || user.is_faculty === true;
     const allLinks = document.querySelectorAll(".sidebar-link");
 
     allLinks.forEach(link => {
@@ -188,13 +184,12 @@ function applyRoleVisibility() {
 
       // 👑 1. MASTER ADMIN RESTRICTIONS
       if (role === "admin") {
-        // 🚀 FIXED: 'faculty dashboard' aur 'faculty.html' ko forbidden list se hata diya taaki Admin ko dikhe
         const forbiddenKeywords = ["ask question", "my questions", "saved questions", "official inquiry", "my inquiries"];
         shouldRemove = forbiddenKeywords.some(keyword => linkText.includes(keyword) || linkHref.includes(keyword.replace(" ", "-")));
       }
       
       // 🎓 2. FACULTY / TEACHER RESTRICTIONS
-      else if (role === "teacher") {
+      else if (isTeacherRole) {
         const forbiddenKeywords = ["admin panel", "official inquiry", "my inquiries"];
         shouldRemove = forbiddenKeywords.some(keyword => linkText.includes(keyword) || linkHref.includes(keyword.replace(" ", "-")) || linkHref.includes("admin.html"));
       }
@@ -205,7 +200,7 @@ function applyRoleVisibility() {
         shouldRemove = forbiddenKeywords.some(keyword => linkText.includes(keyword) || linkHref.includes(keyword.replace(" ", "-")) || linkHref.includes("admin.html") || linkHref.includes("faculty.html"));
       }
 
-      // ✂️ REMOVAL LAYER: Safe node execution channel without reduction
+      // ✂️ REMOVAL LAYER
       if (shouldRemove) {
         const parentWrapper = link.parentElement;
         if (parentWrapper && (parentWrapper.tagName === 'LI' || parentWrapper.classList.contains('sidebar-item'))) {
@@ -221,13 +216,13 @@ function applyRoleVisibility() {
   }
 }
 
-// ⏱️ 🚫 ✅ NEW: INACTIVITY AUTO-LOGOUT GUARD ENGINE (Session Security Guardian)
+// ⏱️ INACTIVITY AUTO-LOGOUT GUARD
 function initializeAutoLogoutGuard() {
   const token = localStorage.getItem("token");
-  if (!token) return; // User pehle se hi logged out h, skip tracker
+  if (!token) return;
 
   let inactivityTimeout;
-  const INACTIVITY_LIMIT = 15 * 60 * 1000; // 15 Minutes (Miliseconds format me)
+  const INACTIVITY_LIMIT = 15 * 60 * 1000;
 
   function resetSessionTimer() {
     clearTimeout(inactivityTimeout);
@@ -238,7 +233,6 @@ function initializeAutoLogoutGuard() {
     localStorage.removeItem("token");
     localStorage.removeItem("amc_user");
     
-    // Popup standard professional alert trigger message before page redirection
     if (typeof Swal !== "undefined" && Swal.fire) {
       await Swal.fire({
         title: 'Session Expired',
@@ -252,7 +246,6 @@ function initializeAutoLogoutGuard() {
     window.location.href = "login.html";
   }
 
-  // Activity listeners array setup matrix mapping
   window.onload = resetSessionTimer;
   window.onmousemove = resetSessionTimer;
   window.onmousedown = resetSessionTimer; 
@@ -268,9 +261,8 @@ function checkAuthGuard() {
     const currentPage = window.location.pathname.split("/").pop();
 
     if (!token && currentPage !== "login.html" && currentPage !== "signup.html") {
-        // Data fetch hone hi mat do!
         window.location.replace("login.html"); 
-        return false; // Stop further execution
+        return false;
     }
     return true;
 }
@@ -286,7 +278,6 @@ function setupMobileMenu() {
     }
 }
 
-// Global click event to close sidebar when clicking outside
 document.addEventListener('click', (e) => {
   const sidebar = document.querySelector(".sidebar");
   const mobileMenuBtn = document.getElementById("mobileMenuBtn");
@@ -297,18 +288,13 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// ui.js mein is function ko replace karo (Bina kisi logic ko reduce kiye)
 async function loadBaseLayout() {
-    // Sabse safe: window.location.origin ka use karo jo automatically port 5500 (frontend) 
-    // ya ngrok domain ko default base URL bana deta hai.
     const currentOrigin = window.location.origin;
 
     const sidebarMount = document.getElementById("sidebarMount");
     const navbarMount = document.getElementById("navbarMount");
 
     if (sidebarMount && navbarMount) {
-        // 🚀 DOUBLE-STRETCH ROUTING: Frontend port aur FastAPI mount patterns dono ko fallback support
-        // Pehle direct relative files check karega jo frontend layout par safe hain
         await Promise.all([
             loadComponent("sidebarMount", `${currentOrigin}/components/sidebar.html`), 
             loadComponent("navbarMount", `${currentOrigin}/components/navbar.html`)
@@ -317,10 +303,9 @@ async function loadBaseLayout() {
         const appShell = document.querySelector('.app-shell');
         if (appShell) appShell.classList.add('loaded');
         
-        // 🚀 CRITICAL EXECUTION: Component mount hone ke turant baad call lagao
         setupMobileMenu();
         applyActiveSidebarLink();
-        applyNavbarUser(); // <--- Yeh line zaroor check karna yahan par ho
+        applyNavbarUser();
         attachNavbarActions();
         applyRoleVisibility();
         initializeAutoLogoutGuard();
@@ -331,7 +316,6 @@ async function loadBaseLayout() {
 
 async function updateNotificationBadge() {
     const badge = document.getElementById("notificationCountBadge");
-    // Agar navbar load nahi hua hai ya badge nahi mila, toh silent return karo
     if (!badge) return; 
 
     try {
@@ -350,4 +334,3 @@ async function updateNotificationBadge() {
         console.warn("Notification badge update skipped:", err);
     }
 }
-

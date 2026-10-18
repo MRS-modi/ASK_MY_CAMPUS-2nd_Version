@@ -23,7 +23,7 @@
         display: grid; 
         grid-template-columns: 1fr 320px; 
         gap: 24px; 
-        align-items: stretch; /* Ye ensure karega ki dono boxes ki height same rahe */
+        align-items: stretch;
     }
     
     .tips-card { 
@@ -33,15 +33,14 @@
         padding: 24px;
         position: sticky; 
         top: 100px;
-        height: 100%; /* Box ko pura lamba kar dega */
-        min-height: 450px; /* Isse kam height nahi hogi */
+        height: 100%;
+        min-height: 450px;
     }
     .tips-card h3 { color: #a78bfa; margin-top: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
     .tips-list { list-style: none; padding: 0; margin: 16px 0 0 0; }
     .tips-list li { font-size: 0.9rem; color: #94a3b8; margin-bottom: 12px; line-height: 1.5; padding-left: 20px; position: relative; }
     .tips-list li::before { content: "⚡"; position: absolute; left: 0; color: #a78bfa; }
 
-    /* Mobile Responsive */
     @media (max-width: 950px) {
         .ask-page-layout { grid-template-columns: 1fr; }
         .tips-card { position: static; }
@@ -51,7 +50,6 @@
   <script src="assets/js/darkmode.js"></script>
   <script src="assets/js/ui.js" defer></script>
   <script src="assets/js/api.js"></script>
-  
 </head>
 <body>
   <div class="app-shell">
@@ -69,67 +67,68 @@
         </div>
 
         <div class="ask-page-layout">
-        <div class="card">
-          <div style="display:flex;flex-direction:column;gap:18px;">
-            <div>
-              <label style="display:block;margin-bottom:8px;font-weight:600;">Question Title</label>
-              <input
-                id="title"
-                type="text"
-                placeholder="e.g. How to prepare for first semester practical exam?"
-                style="width:100%;padding:14px 16px;border:1px solid rgba(255,255,255,0.08);border-radius:14px;background:rgba(255,255,255,0.04);"
-              />
+          <div class="card">
+            <div style="display:flex;flex-direction:column;gap:18px;">
+              <div>
+                <label style="display:block;margin-bottom:8px;font-weight:600;">Question Title</label>
+                <input
+                  id="title"
+                  type="text"
+                  placeholder="e.g. How to prepare for first semester practical exam?"
+                  style="width:100%;padding:14px 16px;border:1px solid rgba(255,255,255,0.08);border-radius:14px;background:rgba(255,255,255,0.04);"
+                />
+              </div>
+
+              <div>
+                <label style="display:block;margin-bottom:8px;font-weight:600;">Description</label>
+                <textarea
+                  id="content"
+                  placeholder="Explain your doubt..."
+                  style="width:100%;height:180px;padding:14px 16px;border:1px solid rgba(255,255,255,0.08);border-radius:14px;background:rgba(255,255,255,0.04);resize:vertical;"
+                ></textarea>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                <div>
+                  <label>Department</label>
+                  <select id="deptSelect" onchange="loadBranches(this.value)" style="width:100%;padding:14px;border:1px solid rgba(255,255,255,0.08);border-radius:14px;background:rgba(255,255,255,0.04); color:white;">
+                    <option value="">Select Dept</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Branch</label>
+                  <select id="branchSelect" onchange="loadCourses(this.value)" style="width:100%;padding:14px;border:1px solid rgba(255,255,255,0.08);border-radius:14px;background:rgba(255,255,255,0.04); color:white;">
+                    <option value="">Select Branch</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Course/Subject</label>
+                  <select id="courseSelect" style="width:100%;padding:14px;border:1px solid rgba(255,255,255,0.08);border-radius:14px;background:rgba(255,255,255,0.04); color:white;">
+                    <option value="">Select Course</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label style="display:block;margin-bottom:8px;font-weight:600;">Tags</label>
+                <input
+                  id="tags"
+                  type="text"
+                  placeholder="e.g. exam, practical, first-year"
+                  style="width:100%;padding:14px 16px;border:1px solid rgba(255,255,255,0.08);border-radius:14px;background:rgba(255,255,255,0.04);"
+                />
+              </div>
+
+              <div style="display:flex;gap:14px;flex-wrap:wrap;">
+                <button class="btn-primary" id="postQuestionBtn" onclick="submitQuestion(event)">Post Question</button>
+                <a href="index.html" class="btn-secondary">Cancel</a>
+              </div>
+
+              <div id="askMessage" style="margin-top:8px;color:#94a3b8;"></div>
             </div>
-
-            <div>
-              <label style="display:block;margin-bottom:8px;font-weight:600;">Description</label>
-              <textarea
-                id="content"
-                placeholder="Explain your doubt..."
-                style="width:100%;height:180px;padding:14px 16px;border:1px solid rgba(255,255,255,0.08);border-radius:14px;background:rgba(255,255,255,0.04);resize:vertical;"
-              ></textarea>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
-  <div>
-    <label>Department</label>
-    <select id="deptSelect" onchange="loadBranches(this.value)" style="width:100%;padding:14px;border:1px solid rgba(255,255,255,0.08);border-radius:14px;background:rgba(255,255,255,0.04); color:white;">
-      <option value="">Select Dept</option>
-    </select>
-  </div>
-  <div>
-    <label>Branch</label>
-    <select id="branchSelect" onchange="loadCourses(this.value)" style="width:100%;padding:14px;border:1px solid rgba(255,255,255,0.08);border-radius:14px;background:rgba(255,255,255,0.04); color:white;">
-      <option value="">Select Branch</option>
-    </select>
-  </div>
-  <div>
-    <label>Course/Subject</label>
-    <select id="courseSelect" style="width:100%;padding:14px;border:1px solid rgba(255,255,255,0.08);border-radius:14px;background:rgba(255,255,255,0.04); color:white;">
-      <option value="">Select Course</option>
-    </select>
-  </div>
-</div>
-
-            <div>
-              <label style="display:block;margin-bottom:8px;font-weight:600;">Tags</label>
-              <input
-                id="tags"
-                type="text"
-                placeholder="e.g. exam, practical, first-year"
-                style="width:100%;padding:14px 16px;border:1px solid rgba(255,255,255,0.08);border-radius:14px;background:rgba(255,255,255,0.04);"
-              />
-            </div>
-
-            <div style="display:flex;gap:14px;flex-wrap:wrap;">
-              <button class="btn-primary" onclick="submitQuestion()">Post Question</button>
-              <a href="index.html" class="btn-secondary">Cancel</a>
-            </div>
-
-            <div id="askMessage" style="margin-top:8px;color:#94a3b8;"></div>
           </div>
-        </div>
-      <div class="tips-card">
+
+          <div class="tips-card">
             <h3>💡 Posting Guidelines</h3>
             <ul class="tips-list">
               <li><strong>Be Clear:</strong> Use a concise title that summarizes your doubt.</li>
@@ -145,121 +144,123 @@
   </div>
 
   <script>
-document.addEventListener("DOMContentLoaded", async () => {
-    // 1. Auth Guard
-    if (!localStorage.getItem("token")) { window.location.href = "login.html"; return; }
-    
-    // 2. Layout Load (Absolute Path)
-    await loadBaseLayout(); 
-    
-    // 3. UI logic
-    applyRoleVisibility(); 
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (!localStorage.getItem("token")) { 
+        window.location.href = "login.html"; 
+        return; 
+      }
+      
+      await loadBaseLayout(); 
+      applyRoleVisibility(); 
 
-    // 4. Page logic (Check if deptSelect exists)
-    try {
+      try {
         const depts = await apiRequest("/admin/academic/departments");
         const deptSelect = document.getElementById("deptSelect");
         if (deptSelect && depts) {
-            deptSelect.innerHTML = '<option value="">Select Department</option>'; // Reset
-            depts.forEach(d => {
-                deptSelect.innerHTML += `<option value="${d.id}">${d.name}</option>`;
-            });
+          deptSelect.innerHTML = '<option value="">Select Department</option>';
+          depts.forEach(d => {
+            deptSelect.innerHTML += `<option value="${d.id}">${d.name}</option>`;
+          });
         }
-    } catch (err) {
-        console.error("Error:", err);
+      } catch (err) {
+        console.error("Department initialization failed:", err);
+      }
+    });
+
+    async function loadBranches(deptId) {
+      const branchSelect = document.getElementById("branchSelect");
+      branchSelect.innerHTML = '<option value="">Select Branch</option>';
+      document.getElementById("courseSelect").innerHTML = '<option value="">Select Course</option>';
+      if (!deptId) return;
+      const branches = await apiRequest(`/admin/academic/branches/${deptId}`);
+      branches.forEach(b => branchSelect.innerHTML += `<option value="${b.id}">${b.name}</option>`);
     }
-});
 
+    async function loadCourses(branchId) {
+      const courseSelect = document.getElementById("courseSelect");
+      courseSelect.innerHTML = '<option value="">Select Course</option>';
+      if (!branchId) return;
+      const courses = await apiRequest(`/admin/academic/courses/${branchId}`);
+      courses.forEach(c => courseSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`);
+    }
 
-async function loadBranches(deptId) {
-    const branchSelect = document.getElementById("branchSelect");
-    branchSelect.innerHTML = '<option value="">Select Branch</option>';
-    if (!deptId) return;
-    const branches = await apiRequest(`/admin/academic/branches/${deptId}`);
-    branches.forEach(b => branchSelect.innerHTML += `<option value="${b.id}">${b.name}</option>`);
-}
+    async function submitQuestion(evt) {
+      if (evt) evt.preventDefault();
 
-async function loadCourses(branchId) {
-    const courseSelect = document.getElementById("courseSelect");
-    courseSelect.innerHTML = '<option value="">Select Course</option>';
-    if (!branchId) return;
-    const courses = await apiRequest(`/admin/academic/courses/${branchId}`);
-    courses.forEach(c => courseSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`);
-}
+      const title = document.getElementById("title").value.trim();
+      const content = document.getElementById("content").value.trim();
+      const deptId = document.getElementById("deptSelect").value;
+      const branchId = document.getElementById("branchSelect").value;
+      const courseId = document.getElementById("courseSelect").value;
+      const tags = document.getElementById("tags").value.trim();
+      const askMessage = document.getElementById("askMessage");
+      const postBtn = document.getElementById("postQuestionBtn");
 
-// Replaced submitQuestion function inside ask.html with Strict Mandatory Validation
+      if (!title || !content) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Missing Required Fields',
+          text: 'Please provide both Title and Description for your question.',
+          background: '#1e293b',
+          color: '#fff',
+          confirmButtonColor: '#8b5cf6'
+        });
+        return;
+      }
 
-async function submitQuestion() {
-  const title = document.getElementById("title").value.trim();
-  const content = document.getElementById("content").value.trim();
-  
-  // Extract selector IDs
-  const deptId = document.getElementById("deptSelect").value;
-  const branchId = document.getElementById("branchSelect").value;
-  const courseId = document.getElementById("courseSelect").value;
-  
-  const tags = document.getElementById("tags").value.trim();
-  const askMessage = document.getElementById("askMessage");
-  const postBtn = event.target; 
+      if (!deptId || !branchId || !courseId) {
+        Swal.fire({
+          icon: 'info',
+          title: 'Academic Details Required',
+          text: 'Please select Department, Branch, and Course to ensure proper categorization.',
+          background: '#1e293b',
+          color: '#fff',
+          confirmButtonColor: '#8b5cf6'
+        });
+        return;
+      }
 
-  // 1. Text Fields Validation
-  if (!title || !content) {
-    Swal.fire({ icon: 'warning', title: 'Fields Missing', text: 'Bhai, Title aur Description likhna zaroori hai!', background: '#1e293b', color: '#fff' });
-    return;
-  }
+      const token = localStorage.getItem("token");
+      if (!token) {
+        askMessage.textContent = "Authentication required to post a question.";
+        return;
+      }
 
-  // 2. 🚨 MANDATORY DROPDOWNS VALIDATION
-  // Agar ek bhi dropdown select nahi hua, toh submit block ho jayega
-  if (!deptId || !branchId || !courseId) {
-    Swal.fire({
-      icon: 'info',
-      title: 'Academic Details Required',
-      text: 'Please select Department, Branch, and Course zaroor se taaki sahi log help kar sakein.',
-      background: '#1e293b',
-      color: '#fff',
-      confirmButtonColor: '#8b5cf6'
-    });
-    return;
-  }
+      if (postBtn) {
+        postBtn.disabled = true;
+        postBtn.textContent = "Posting...";
+      }
+      if (askMessage) askMessage.textContent = "Processing submission...";
 
-  const token = localStorage.getItem("token");
-  if (!token) {
-    askMessage.textContent = "You must login first before posting a question.";
-    return;
-  }
+      try {
+        await apiRequest("/questions", "POST", {
+          title: title,
+          content: content,
+          dept_id: parseInt(deptId),
+          branch_id: parseInt(branchId),
+          course_id: parseInt(courseId),
+          tags: tags || null
+        });
 
-  // Duplicate Prevention flow pipeline
-  postBtn.disabled = true;
-  postBtn.textContent = "Posting...";
-  askMessage.textContent = "Processing campus data layers...";
+        await Swal.fire({
+          icon: 'success',
+          title: 'Question Posted!',
+          text: 'Your doubt has been published and mapped to academic filters.',
+          timer: 1500,
+          showConfirmButton: false,
+          background: '#1e293b',
+          color: '#fff'
+        });
 
-  try {
-    // Payload safely bound to backend model parameters mapping
-    await apiRequest("/questions", "POST", {
-      title: title,
-      content: content,
-      dept_id: parseInt(deptId),
-      branch_id: parseInt(branchId),
-      course_id: parseInt(courseId),
-      tags: tags || null
-    });
-
-    await Swal.fire({
-      icon: 'success',
-      title: 'Posted Successfully!',
-      text: 'Your question has been mapped to academic filters.',
-      timer: 1500,
-      showConfirmButton: false
-    });
-
-    window.location.href = "my-questions.html";
-  } catch (error) {
-    postBtn.disabled = false;
-    postBtn.textContent = "Post Question";
-    askMessage.textContent = error.message || "Failed to post question structural payload.";
-  }
-}
-
-</script>
+        window.location.href = "my-questions.html";
+      } catch (error) {
+        if (postBtn) {
+          postBtn.disabled = false;
+          postBtn.textContent = "Post Question";
+        }
+        if (askMessage) askMessage.textContent = error.message || "Failed to post question.";
+      }
+    }
+  </script>
 </body>
 </html>

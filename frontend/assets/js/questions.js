@@ -327,8 +327,20 @@ function initializeSearchPipeline() {
     const searchInput = document.querySelector('input[placeholder*="Search questions"]');
     if (searchInput) {
       clearInterval(searchInterval); searchInput.addEventListener("input", async (e) => {
-        const rawQuery = e.target.value.trim(); if (rawQuery.length === 0) { renderQuestionCards("questionsList", cachedHomeQuestions, "No questions asked yet."); return; }
-        try { const filteredResult = await apiRequest(`/questions/search/query?query=${encodeURIComponent(rawQuery)}`); renderQuestionCards("questionsList", filteredResult, `No campus doubts matched: "${rawQuery}"`); } catch (err) { console.error(err); }
+        const rawQuery = e.target.value.trim(); 
+        if (rawQuery.length === 0) { renderQuestionCards("questionsList", cachedHomeQuestions, "No questions asked yet."); return; }
+        
+        try { 
+            let filteredResult;
+            // 🚀 FIXED: Direct tag routing logic when using "#"
+            if (rawQuery.startsWith("#")) {
+                const tagSearch = rawQuery.replace("#", "").trim();
+                filteredResult = await apiRequest(`/questions/tags/${tagSearch}/questions`);
+            } else {
+                filteredResult = await apiRequest(`/questions/search/query?query=${encodeURIComponent(rawQuery)}`); 
+            }
+            renderQuestionCards("questionsList", filteredResult, `No campus doubts matched for: "${rawQuery}"`); 
+        } catch (err) { console.error(err); }
       });
     }
   }, 200); 
